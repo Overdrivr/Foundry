@@ -1,0 +1,19 @@
+{
+  "name": "foundry",
+  "version": "1.0.0",
+  "description": "A toolset for creating textures with a focus on modularity and reusability.",
+  "author": "Remi Beges <remi.beges@gmail.com> <@remibgs>",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "body-parser": "~1.13.2",
+    "cookie-parser": "~1.3.5",
+    "debug": "~2.2.0",
+    "express": "~4.13.1",
+    "jade": "~1.11.0",
+    "morgan": "~1.6.1",
+    "serve-favicon": "~2.3.0"
+  }
+}
