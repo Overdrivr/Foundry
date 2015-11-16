@@ -25,6 +25,5 @@
     "tests"
   ],
   "dependencies": {
-    "vis": "~4.9.0"
   }
 }
