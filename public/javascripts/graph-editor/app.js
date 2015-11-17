@@ -41,6 +41,8 @@ d3.json("javascripts/graph-editor/graph.json", function(json) {
         .attr("y",function(d,i) { return 10 * i; })
         .attr("transform", function(d,i) { return "translate(" + 100 * i + "," + 50 + ")"; })
         .call(node_drag);
+
+        var rects = node.append("svg:rect");
 /*
     var rects = node.append("svg:rect")
       .attr("class","rect")
@@ -53,33 +55,66 @@ d3.json("javascripts/graph-editor/graph.json", function(json) {
 
     var divs = node.append("foreignObject")
           .attr("class","foreignObject")
-          .style("width", "400px")
-          .style("height", "50px")
+          .style("width", "1px")
+          .style("height", "1px");
 
-    var bd = divs.append("xhtml:body")
+
+    var bd = divs.append("xhtml:div")
               .attr("class","nodelabel")
-              .style("width", "400px")
+              .style("width", "300px")
               .style("height", "50px")
-              .append("div")
+              .style("max-height","400px")
 
 
           bd.append("xhtml:p")
           .text("Click me alalalalalalal");
-    /*
-    node.append("svg:image")
-        .attr("class", "circle")
-        .attr("xlink:href", "https://github.com/favicon.ico")
-        .attr("x", "-8px")
-        .attr("y", "-8px")
-        .attr("width", "16px")
-        .attr("height", "16px");
 
-    rects.append("svg:text")
-        .attr("class", "nodetext")
-        .attr("dx", 0)
-        .attr("dy", ".35em")
-        .text(function(d) { return d.name });
-*/
+          divs
+          .style("width",bd.node().getBoundingClientRect().width)
+          .style("height",bd.node().getBoundingClientRect().height);
+
+    // filters go in defs element
+    var defs = vis.append("defs");
+
+    // create filter with id #drop-shadow
+    // height=130% so that the shadow is not clipped
+    var filter = defs.append("filter")
+        .attr("id", "drop-shadow")
+        .attr("height", "130%");
+
+    // SourceAlpha refers to opacity of graphic that this filter will be applied to
+    // convolve that with a Gaussian with standard deviation 3 and store result
+    // in blur
+    filter.append("feGaussianBlur")
+        .attr("in", "SourceAlpha")
+        .attr("stdDeviation", 5)
+        .attr("result", "blur");
+
+    // translate output of Gaussian blur to the right and downwards with 2px
+    // store result in offsetBlur
+    filter.append("feOffset")
+        .attr("in", "blur")
+        .attr("dx", 5)
+        .attr("dy", 5)
+        .attr("result", "offsetBlur");
+
+
+        // overlay original SourceGraphic over translated blurred opacity by using
+    // feMerge filter. Order of specifying inputs is important!
+    var feMerge = filter.append("feMerge");
+
+    feMerge.append("feMergeNode")
+        .attr("in", "offsetBlur")
+    feMerge.append("feMergeNode")
+        .attr("in", "SourceGraphic");
+
+    // Shadows seem complicated for now. We'll see later
+    /*
+    rects
+      .style("filter", "url(#drop-shadow)")
+      .attr("width",bd.node().getBoundingClientRect().width)
+      .attr("height",bd.node().getBoundingClientRect().height)*/
+
     function dragstart(d, i) {
         //force.stop() // stops the force auto positioning before you start dragging
     }
