@@ -124,6 +124,12 @@ d3.json("javascripts/graph-editor/graph.json", function(json) {
         n.attr("x",function(){return +d3.select(this).attr("x") + d3.event.dx});
         n.attr("y",function(){return +d3.select(this).attr("y") + d3.event.dy});
         n.attr("transform", function() { return "translate(" + +d3.select(this).attr("x") + "," + +d3.select(this).attr("y") + ")"; });
+
+        n.select("div")
+        .style("width", "500px");
+
+        n.select("foreignObject")
+        .style("width","500px");
     }
 
     function dragend(d, i) {
