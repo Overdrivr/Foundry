@@ -63,9 +63,9 @@ d3.json("javascripts/graph-editor/graph.json", function(json) {
 
     function dragmove(d, i) {
         var n = d3.select(this);
-        console.log(d)
-        n.attr("x",function(){return n.x + d3.event.dx})
-        n.attr("transform", function() { return "translate(" + 100 + "," + 200 + ")"; });
+        n.attr("x",function(){return +d3.select(this).attr("x") + d3.event.dx});
+        console.log(n.attr("x"));
+        n.attr("transform", function() { return "translate(" + +d3.select(this).attr("x") + "," + 200 + ")"; });
         //tick(); // this is the key to make it work together with updating both px,py,x,y on d !
     }
 
