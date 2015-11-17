@@ -41,8 +41,31 @@ d3.json("javascripts/graph-editor/graph.json", function(json) {
         .attr("y",function(d,i) { return 10 * i; })
         .attr("transform", function(d,i) { return "translate(" + 100 * i + "," + 50 + ")"; })
         .call(node_drag);
-      console.log(node);
+/*
+    var rects = node.append("svg:rect")
+      .attr("class","rect")
+      .attr("x",0)
+      .attr("y",0)
+      .attr("width",80)
+      .attr("height",50)
+      .attr("stroke","#b0bec5")
+      .attr("fill","#cfd8dc");*/
 
+    var divs = node.append("foreignObject")
+          .attr("class","foreignObject")
+          .style("width", "400px")
+          .style("height", "50px")
+
+    var bd = divs.append("xhtml:body")
+              .attr("class","nodelabel")
+              .style("width", "400px")
+              .style("height", "50px")
+              .append("div")
+
+
+          bd.append("xhtml:p")
+          .text("Click me alalalalalalal");
+    /*
     node.append("svg:image")
         .attr("class", "circle")
         .attr("xlink:href", "https://github.com/favicon.ico")
@@ -51,12 +74,12 @@ d3.json("javascripts/graph-editor/graph.json", function(json) {
         .attr("width", "16px")
         .attr("height", "16px");
 
-    node.append("svg:text")
+    rects.append("svg:text")
         .attr("class", "nodetext")
-        .attr("dx", 12)
+        .attr("dx", 0)
         .attr("dy", ".35em")
         .text(function(d) { return d.name });
-
+*/
     function dragstart(d, i) {
         //force.stop() // stops the force auto positioning before you start dragging
     }
@@ -64,9 +87,8 @@ d3.json("javascripts/graph-editor/graph.json", function(json) {
     function dragmove(d, i) {
         var n = d3.select(this);
         n.attr("x",function(){return +d3.select(this).attr("x") + d3.event.dx});
-        console.log(n.attr("x"));
-        n.attr("transform", function() { return "translate(" + +d3.select(this).attr("x") + "," + 200 + ")"; });
-        //tick(); // this is the key to make it work together with updating both px,py,x,y on d !
+        n.attr("y",function(){return +d3.select(this).attr("y") + d3.event.dy});
+        n.attr("transform", function() { return "translate(" + +d3.select(this).attr("x") + "," + +d3.select(this).attr("y") + ")"; });
     }
 
     function dragend(d, i) {

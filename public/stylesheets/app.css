@@ -1,2 +1,18 @@
 .link { stroke: #ccc; }
 .nodetext { pointer-events: none; font: 10px sans-serif; }
+
+.foreignObject {
+    font: 9px sans-serif;
+    text-overflow: ellipsis;
+    text-align: left;
+    word-wrap: break-word;
+    margin: 0;
+}
+
+.nodelabel{
+  background-color: #cfd8dc;
+  margin: 0;
+  border-width: 2px;
+  border-color: #757575;
+  border-style: solid;
+}
