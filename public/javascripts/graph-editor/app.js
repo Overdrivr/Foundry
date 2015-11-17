@@ -63,11 +63,28 @@ d3.json("javascripts/graph-editor/graph.json", function(json) {
               .attr("class","nodelabel")
               .style("width", "300px")
               .style("height", "50px")
-              .style("max-height","400px")
+              .style("max-height","400px");
 
 
-          bd.append("xhtml:p")
-          .text("Click me alalalalalalal");
+// HANDLER CODE
+// Not working. Either use a svg:rect for drag or try to set order priority to handle drag 
+  var handle_drag = d3.behavior.drag()
+      .on("drag", resizeleft)
+  var handleright = bd.append("xhtml:div")
+          .attr("class","handleright")
+          .style("width", "5px")
+          .style("height", "100%")
+          .style("background-color", "orange")
+          .style("left","-5px")
+          .style("cursor","ew-resize")
+          .style("float","right")
+          .call(handle_drag)
+
+          bd
+          .append("xhtml:p")
+          .text("Click me alalalalalalal")
+          .style("float","center")
+
 
           divs
           .style("width",bd.node().getBoundingClientRect().width)
@@ -136,6 +153,19 @@ d3.json("javascripts/graph-editor/graph.json", function(json) {
         d.fixed = true; // of course set the node to fixed so the force doesn't include the node in its auto positioning stuff
         //tick();
         //force.resume();
+    }
+
+    function resizeleft(d, i)
+    {
+      var n = d3.select(this);
+
+      n.select("div")
+      .style("width", +n.select("div").style(width) + d3.event.dx);
+
+      n.select("foreignObject")
+      .style("width", +n.select("div").style(width) + d3.event.dx);
+
+      console.log("resizeleft");
     }
 
 
