@@ -39,7 +39,7 @@ d3.json("javascripts/graph-editor/graph.json", function(json) {
         .attr("class", "node")
         .attr("x",function(d,i) { return 100 * i; })
         .attr("y",function(d,i) { return 10 * i; })
-        .attr("transform", function(d,i) { return "translate(" + 100 * i + "," + 50 + ")"; })
+        .attr("transform", function(d,i) { return "translate(" + 100 * i + "," + 10 * i + ")"; })
         .call(node_drag);
 
         var rects = node.append("svg:rect");
