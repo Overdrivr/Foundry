@@ -10,8 +10,9 @@ jsPlumb.bind("ready", function() {
   endpoint:"Dot",
   isSource:true,
   isTarget:true,
-  anchor:[ "Right", { shape:"Square" } ]
+  anchor:[ 1, 0.8, 1, 0 ]
   });
+
   jsPlumb.addEndpoint("item_right", {
   endpoint:"Dot",
   isSource:true,
