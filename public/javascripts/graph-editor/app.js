@@ -43,6 +43,11 @@ d3.json("javascripts/graph-editor/graph.json", function(json) {
         .call(node_drag);
 
         var rects = node.append("svg:rect");
+
+        var resizehandler = node.append("svg:polygon")
+            .attr("points","-30,0 0,-30 0,0 ")
+            .attr("x",function(d,i) { return 100 * i + 100; })
+            .attr("y",function(d,i) { return 10 * i + 10;})
 /*
     var rects = node.append("svg:rect")
       .attr("class","rect")
@@ -67,18 +72,18 @@ d3.json("javascripts/graph-editor/graph.json", function(json) {
 
 
 // HANDLER CODE
-// Not working. Either use a svg:rect for drag or try to set order priority to handle drag 
+// Not working. Either use a svg:rect for drag or try to set order priority to handle drag
   var handle_drag = d3.behavior.drag()
       .on("drag", resizeleft)
-  var handleright = bd.append("xhtml:div")
+  /*var handleright = bd.append("xhtml:div")
           .attr("class","handleright")
           .style("width", "5px")
-          .style("height", "100%")
+          .style("height", "5px")
           .style("background-color", "orange")
-          .style("left","-5px")
+          .style("left","5px")
           .style("cursor","ew-resize")
-          .style("float","right")
-          .call(handle_drag)
+          .style("bottom","-5px")
+          .call(handle_drag)*/
 
           bd
           .append("xhtml:p")
@@ -141,12 +146,12 @@ d3.json("javascripts/graph-editor/graph.json", function(json) {
         n.attr("x",function(){return +d3.select(this).attr("x") + d3.event.dx});
         n.attr("y",function(){return +d3.select(this).attr("y") + d3.event.dy});
         n.attr("transform", function() { return "translate(" + +d3.select(this).attr("x") + "," + +d3.select(this).attr("y") + ")"; });
-
+        /*
         n.select("div")
         .style("width", "500px");
 
         n.select("foreignObject")
-        .style("width","500px");
+        .style("width","500px");*/
     }
 
     function dragend(d, i) {
