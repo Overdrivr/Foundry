@@ -3,17 +3,6 @@ jsPlumb.bind("ready", function() {
   // your jsPlumb related init code goes here
   jsPlumb.setContainer("conteneur");
 
-  jsPlumb.draggable("item_left");
-  jsPlumb.draggable("item_right");
-
-  jsPlumb.addEndpoint("item_left", {
-  endpoint:"Dot",
-  isSource:true,
-  isTarget:true,
-  anchor:[ 1, 0.8, 1, 0 ]
-  });
-
-
 });
 
 var nodeAmount = 0;
@@ -25,23 +14,32 @@ function createNode(){
     outputs:3
   }
 
+  var headersize = 30;
+  var rowsize = 20;
+  var totalsize = headersize + rowsize * (data.inputs + data.outputs)
+  console.log(totalsize);
   var body = d3.select("div.cont");
-  console.log(body)
   var div = body.append("div")
               .attr("class","item")
-              .attr("id","toto");
+              .attr("id","node" + nodeAmount)
+              .style("height",totalsize + "px")
+              .style("width", "80px");
+  var header = div.append("div")
+                .style("height",headersize)
+                .append("p")
+                .text("Perlin2D");
 
-      div.append("p")
-        .text("Hey")
+              div.append("hr");
 
   console.log(div);
 
-  jsPlumb.draggable("toto");
-  jsPlumb.addEndpoint("toto", {
+  jsPlumb.draggable(div.attr("id"));
+  jsPlumb.addEndpoint(div.attr("id"), {
   endpoint:"Dot",
   isSource:true,
   isTarget:true,
-  anchor:[ "Left", { shape:"Square" } ]
+  anchor:[ 1, 0.8, 1, 0 ]
+  //anchor:[ "Right", { shape:"Square" } ]
 });
   nodeAmount++;
 }

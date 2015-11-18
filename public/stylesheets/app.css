@@ -9,7 +9,8 @@
 }
 
 .item {
-   height:80px; width: 80px;
    border: 1px solid blue;
    position: absolute;
 }
+
+hr { width:100%; height:1px; background: #fff }
