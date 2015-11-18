@@ -81,6 +81,13 @@ d3.json("javascripts/graph-editor/graph.json", function(json) {
     function conndragstart(d, i) {
         d3.event.sourceEvent.stopPropagation();
         console.log("start link");
+
+        var n = d3.select(this.parentElement);
+
+        vis.append('svg:path')
+          .attr('class', 'link dragline hidden')
+          .attr('d', "M" + n.attr("x") + "," + n.attr("y") + "L" + n.attr("x") + "," + n.attr("y") +)
+          .style('marker-end', 'url(#mark-end-arrow)');
     }
 
     function conndragmove(d, i) {
