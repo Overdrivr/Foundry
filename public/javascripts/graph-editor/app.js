@@ -42,12 +42,10 @@ d3.json("javascripts/graph-editor/graph.json", function(json) {
         .attr("transform", function(d,i) { return "translate(" + 100 * i + "," + 10 * i + ")"; })
         .call(node_drag);
 
-        var rects = node.append("svg:rect");
-
         var resizehandler = node.append("svg:polygon")
             .attr("points","-30,0 0,-30 0,0 ")
-            .attr("x",function(d,i) { return 100 * i + 100; })
-            .attr("y",function(d,i) { return 10 * i + 10;})
+            .attr("transform", function(d) { return "translate(" + 350 + "," + 70 + ")"; });
+
 /*
     var rects = node.append("svg:rect")
       .attr("class","rect")
@@ -64,7 +62,8 @@ d3.json("javascripts/graph-editor/graph.json", function(json) {
           .style("height", "1px");
 
 
-    var bd = divs.append("xhtml:div")
+    var bd = divs
+              .append("xhtml:div")
               .attr("class","nodelabel")
               .style("width", "300px")
               .style("height", "50px")
