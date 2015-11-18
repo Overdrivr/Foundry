@@ -27,10 +27,22 @@ d3.json("javascripts/graph-editor/graph.json", function(json) {
         .attr("x2", function(d) { return d.target.x; })
         .attr("y2", function(d) { return d.target.y; });
 */
+// HANDLER CODE
+// Not working. Either use a svg:rect for drag or try to set order priority to handle drag
+  var handle_drag = d3.behavior.drag()
+      .on("dragstart",resizestart)
+      .on("drag", resizeleft)
+
     var node_drag = d3.behavior.drag()
+        .origin(Object)
         .on("dragstart", dragstart)
         .on("drag", dragmove)
         .on("dragend", dragend);
+
+
+    var width = 200;
+    var height = 50;
+    var dragbarw = 5;
 
     var node = vis.selectAll("g.node")
         .data(json.nodes)
@@ -40,11 +52,40 @@ d3.json("javascripts/graph-editor/graph.json", function(json) {
         .attr("x",function(d,i) { return 100 * i; })
         .attr("y",function(d,i) { return 10 * i; })
         .attr("transform", function(d,i) { return "translate(" + 100 * i + "," + 10 * i + ")"; })
+        .data([{x: width / 2, y: height / 2}])
         .call(node_drag);
 
-        var resizehandler = node.append("svg:polygon")
-            .attr("points","-30,0 0,-30 0,0 ")
-            .attr("transform", function(d) { return "translate(" + 350 + "," + 70 + ")"; });
+        var dragbarright = node.append("rect")
+          .attr("x", function(d) { return d.x + width - (dragbarw/2); })
+          .attr("y", function(d) { return d.y + (dragbarw/2); })
+          .attr("id", "dragright")
+          .attr("height", height - dragbarw)
+          .attr("width", dragbarw)
+          .attr("fill", "lightblue")
+          .attr("fill-opacity", .5)
+          .attr("cursor", "ew-resize")
+          .call(handle_drag);
+
+
+    /*
+    var resizehandler = node.append("svg:polygon")
+        .attr("points","-30,0 0,-30 0,0 ")
+        .attr("x", function(d) { return d.x + width - (dragbarw/2); })
+        .attr("y", function(d) { return d.y + (dragbarw/2); })
+        .attr("id", "dragright")
+        .attr("height", height - dragbarw)
+        .attr("width", dragbarw)
+        .call(handle_drag);
+*/
+        var dragrect = node.append("rect")
+            .attr("id", "active")
+            .attr("x", function(d) { return d.x; })
+            .attr("y", function(d) { return d.y; })
+            .attr("height", width)
+            .attr("width", height)
+            .attr("fill-opacity", .5)
+            .attr("cursor", "move")
+
 
 /*
     var rects = node.append("svg:rect")
@@ -55,11 +96,12 @@ d3.json("javascripts/graph-editor/graph.json", function(json) {
       .attr("height",50)
       .attr("stroke","#b0bec5")
       .attr("fill","#cfd8dc");*/
-
+/*
     var divs = node.append("foreignObject")
           .attr("class","foreignObject")
           .style("width", "1px")
-          .style("height", "1px");
+          .style("height", "1px")
+          .call(node_drag);
 
 
     var bd = divs
@@ -68,22 +110,9 @@ d3.json("javascripts/graph-editor/graph.json", function(json) {
               .style("width", "300px")
               .style("height", "50px")
               .style("max-height","400px");
+*/
 
-
-// HANDLER CODE
-// Not working. Either use a svg:rect for drag or try to set order priority to handle drag
-  var handle_drag = d3.behavior.drag()
-      .on("drag", resizeleft)
-  /*var handleright = bd.append("xhtml:div")
-          .attr("class","handleright")
-          .style("width", "5px")
-          .style("height", "5px")
-          .style("background-color", "orange")
-          .style("left","5px")
-          .style("cursor","ew-resize")
-          .style("bottom","-5px")
-          .call(handle_drag)*/
-
+/*
           bd
           .append("xhtml:p")
           .text("Click me alalalalalalal")
@@ -93,9 +122,10 @@ d3.json("javascripts/graph-editor/graph.json", function(json) {
           divs
           .style("width",bd.node().getBoundingClientRect().width)
           .style("height",bd.node().getBoundingClientRect().height);
+          */
 
     // filters go in defs element
-    var defs = vis.append("defs");
+    /*var defs = vis.append("defs");
 
     // create filter with id #drop-shadow
     // height=130% so that the shadow is not clipped
@@ -127,7 +157,7 @@ d3.json("javascripts/graph-editor/graph.json", function(json) {
     feMerge.append("feMergeNode")
         .attr("in", "offsetBlur")
     feMerge.append("feMergeNode")
-        .attr("in", "SourceGraphic");
+        .attr("in", "SourceGraphic");*/
 
     // Shadows seem complicated for now. We'll see later
     /*
@@ -136,11 +166,17 @@ d3.json("javascripts/graph-editor/graph.json", function(json) {
       .attr("width",bd.node().getBoundingClientRect().width)
       .attr("height",bd.node().getBoundingClientRect().height)*/
 
+    function resizestart(d, i){
+      console.log("there");
+      d3.event.sourceEvent.stopPropagation();
+    }
+
     function dragstart(d, i) {
         //force.stop() // stops the force auto positioning before you start dragging
     }
 
     function dragmove(d, i) {
+
         var n = d3.select(this);
         n.attr("x",function(){return +d3.select(this).attr("x") + d3.event.dx});
         n.attr("y",function(){return +d3.select(this).attr("y") + d3.event.dy});
