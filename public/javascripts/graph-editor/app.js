@@ -7,16 +7,6 @@ var vis = d3.select("body").append("svg:svg")
     .attr("height", h);
 
 d3.json("javascripts/graph-editor/graph.json", function(json) {
-    /*var force = self.force = d3.layout.force()
-        .nodes(json.nodes)
-        .links(json.links)
-        .gravity(.05)
-        .distance(100)
-        .charge(-100)
-        .size([w, h])
-        .start();*/
-
-
 /*
     var link = vis.selectAll("line.link")
         .data(json.links)
@@ -28,43 +18,54 @@ d3.json("javascripts/graph-editor/graph.json", function(json) {
         .attr("y2", function(d) { return d.target.y; });
 */
 // HANDLER CODE
-// Not working. Either use a svg:rect for drag or try to set order priority to handle drag
+
   var handle_drag = d3.behavior.drag()
       .on("dragstart",resizestart)
       .on("drag", resizeleft)
 
-    var node_drag = d3.behavior.drag()
-        .origin(Object)
-        .on("dragstart", dragstart)
-        .on("drag", dragmove)
-        .on("dragend", dragend);
+  var node_drag = d3.behavior.drag()
+      .origin(Object)
+      .on("dragstart", dragstart)
+      .on("drag", dragmove)
+      .on("dragend", dragend);
 
 
-    var width = 200;
-    var height = 50;
-    var dragbarw = 5;
+  var width = 200;
+  var height = 50;
+  var dragbarw = 5;
 
-    var node = vis.selectAll("g.node")
-        .data(json.nodes)
-      .enter().append("svg:g")
-        .attr("nodeid",function(d,i){ return i})
-        .attr("class", "node")
-        .attr("x",function(d,i) { return 100 * i; })
-        .attr("y",function(d,i) { return 10 * i; })
-        .attr("transform", function(d,i) { return "translate(" + 100 * i + "," + 10 * i + ")"; })
-        .data([{x: width / 2, y: height / 2}])
+  var node = vis.selectAll("g.node")
+      .data(json.nodes)
+    .enter().append("svg:g")
+      .attr("nodeid",function(d,i){ return i})
+      .attr("class", "node")
+      .data([{x: width / 2, y: height / 2}])
+      .attr("x",function(d,i) { d.x * i; })
+      .attr("y",function(d,i) { d.y * i; })
+      .call(node_drag);
+
+  var dragbarright = node.append("rect")
+    .attr("x", function(d) { return d.x + width - (dragbarw/2); })
+    .attr("y", function(d) { return d.y + (dragbarw/2); })
+    .attr("id", "dragright")
+    .attr("height", height - dragbarw)
+    .attr("width", dragbarw)
+    .attr("fill", "lightblue")
+    .attr("fill-opacity", 1)
+    .attr("cursor", "ew-resize")
+    .call(handle_drag);
+
+  var divs = node.append("foreignObject")
+        .attr("class","foreignObject")
         .call(node_drag);
 
-        var dragbarright = node.append("rect")
-          .attr("x", function(d) { return d.x + width - (dragbarw/2); })
-          .attr("y", function(d) { return d.y + (dragbarw/2); })
-          .attr("id", "dragright")
-          .attr("height", height - dragbarw)
-          .attr("width", dragbarw)
-          .attr("fill", "lightblue")
-          .attr("fill-opacity", .5)
-          .attr("cursor", "ew-resize")
-          .call(handle_drag);
+
+  var bd = divs
+            .append("xhtml:div")
+            .attr("class","nodelabel")
+            .attr("width","175")
+            .style("width", "175px")
+            .style("height", "100px");
 
 
     /*
@@ -77,40 +78,19 @@ d3.json("javascripts/graph-editor/graph.json", function(json) {
         .attr("width", dragbarw)
         .call(handle_drag);
 */
-        var dragrect = node.append("rect")
-            .attr("id", "active")
-            .attr("x", function(d) { return d.x; })
-            .attr("y", function(d) { return d.y; })
-            .attr("height", width)
-            .attr("width", height)
-            .attr("fill-opacity", .5)
-            .attr("cursor", "move")
-
-
 /*
-    var rects = node.append("svg:rect")
-      .attr("class","rect")
-      .attr("x",0)
-      .attr("y",0)
-      .attr("width",80)
-      .attr("height",50)
-      .attr("stroke","#b0bec5")
-      .attr("fill","#cfd8dc");*/
-/*
-    var divs = node.append("foreignObject")
-          .attr("class","foreignObject")
-          .style("width", "1px")
-          .style("height", "1px")
-          .call(node_drag);
+  var dragrect = node.append("rect")
+      .attr("id", "active")
+      .attr("x", function(d) { return d.x; })
+      .attr("y", function(d) { return d.y; })
+      .attr("height", width)
+      .attr("width", height)
+      .attr("fill-opacity", .5)
+      .attr("cursor", "move")*/
 
 
-    var bd = divs
-              .append("xhtml:div")
-              .attr("class","nodelabel")
-              .style("width", "300px")
-              .style("height", "50px")
-              .style("max-height","400px");
-*/
+
+
 
 /*
           bd
@@ -197,15 +177,19 @@ d3.json("javascripts/graph-editor/graph.json", function(json) {
 
     function resizeleft(d, i)
     {
-      var n = d3.select(this);
+      var n = d3.select(this.parentNode);
+      var di = n.selectAll("div");
 
-      n.select("div")
-      .style("width", +n.select("div").style(width) + d3.event.dx);
+      console.log(di.attr("width"));
+      di.attr("width", +di.attr("width") + d3.event.dx);
+      di.style("width", di.attr("width")+"px");
+/*
+      n.select("nodelabel")
+      .style("width", +n.select("nodelabel").style(width) + d3.event.dx);
 
-      n.select("foreignObject")
-      .style("width", +n.select("div").style(width) + d3.event.dx);
+      n.select("rect")
+      .attr("x", +n.select("rect").attr(width) + d3.event.dx);*/
 
-      console.log("resizeleft");
     }
 
 
