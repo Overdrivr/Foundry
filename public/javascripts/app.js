@@ -10,12 +10,12 @@ jsPlumb.bind("ready", function() {
   endpoint:"Dot",
   isSource:true,
   isTarget:true,
-  anchor:[ "Perimeter", { shape:"Square" } ]
+  anchor:[ "Right", { shape:"Square" } ]
   });
   jsPlumb.addEndpoint("item_right", {
   endpoint:"Dot",
   isSource:true,
   isTarget:true,
-  anchor:[ "Perimeter", { shape:"Square" } ]
+  anchor:[ "Left", { shape:"Square" } ]
   });
 });
