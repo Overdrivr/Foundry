@@ -63,4 +63,35 @@ d3.json("javascripts/graph-editor/graph.json", function(json) {
 
     }
 
+    // Connectors
+    var conn_drag = d3.behavior.drag()
+        .origin(Object)
+        .on("dragstart", conndragstart)
+        .on("drag", conndragmove)
+        .on("dragend", conndragend);
+
+    var conns = node.append("svg:circle")
+          .attr("class","connector")
+          .attr("cx",85)
+          .attr("cy",80)
+          .attr("r",10)
+          .attr("fill","purple")
+          .call(conn_drag);
+
+    function conndragstart(d, i) {
+        d3.event.sourceEvent.stopPropagation();
+        console.log("start link");
+    }
+
+    function conndragmove(d, i) {
+/*
+        var n = d3.select(this);
+        n.attr("x",function(){return +d3.select(this).attr("x") + d3.event.dx});
+        n.attr("y",function(){return +d3.select(this).attr("y") + d3.event.dy});
+        n.attr("transform", function() { return "translate(" + +d3.select(this).attr("x") + "," + +d3.select(this).attr("y") + ")"; });*/
+    }
+
+    function conndragend(d, i) {
+
+    }
 });
