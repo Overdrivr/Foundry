@@ -3,6 +3,7 @@ extends layout
 block content
   h1= title
   script(type="text/javascript" src="javascripts/app.js")
-  input(id="clickMe" type="button" value="clickme" onclick="createNode();")
+  input(id="perlin" type="button" value="Perlin" onclick="createNode('perlin');")
+  input(id="simplex" type="button" value="Simplex" onclick="createNode('simplex');")
   .cont#conteneur
   
