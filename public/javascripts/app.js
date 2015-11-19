@@ -1,3 +1,19 @@
+var nodeAmount = 0;
+
+var nodelist = {
+  "perlin":{
+    "name":"perlin",
+    "inputs":5,
+    "outputs":3
+  },
+  "simplex":{
+    "name":"simplex",
+    "inputs":2,
+    "outputs":1
+  }
+};
+
+
 jsPlumb.bind("ready", function() {
 
   // your jsPlumb related init code goes here
@@ -5,19 +21,25 @@ jsPlumb.bind("ready", function() {
 
 });
 
-var nodeAmount = 0;
+function createNode(nodeType){
+  // TODO : Avoid calling that every time, also, improve code.
+  // For testing only
 
-function createNode(){
+  console.log(nodelist)
+
+  var data = nodelist[nodeType];
+
+  // Todo : Check node exists
+
+  console.log(data);
+
   jsPlumb.setContainer("conteneur");
-  var data = {
-    inputs:5,
-    outputs:3
-  }
+
 
   var headersize = 30;
   var rowsize = 20;
   var totalsize = headersize + rowsize * (data.inputs + data.outputs)
-  console.log(totalsize);
+
   var body = d3.select("div.cont");
 
   // Create node
@@ -36,7 +58,7 @@ function createNode(){
                 //.text("Perlin2D");
 
 
-  // Create each row
+  // Create inputs
   for(var i = 0 ; i < data.inputs ; i++){
     // Create the row
     var e = div.append("div")
@@ -46,7 +68,7 @@ function createNode(){
         //.append("p")
         // /.text("input");
 
-    if(i == 0 || i == 2 || i == 4 || i == 6){
+    if((i % 2) == 0){
       e.style("background","black")
     }
 
@@ -57,16 +79,41 @@ function createNode(){
     console.log(i,abspos)
 
     jsPlumb.addEndpoint(div.attr("id"), {
-    endpoint:[ "Dot", { radius:5 } ],
-    isSource:true,
-    isTarget:true,
-    radius: 5,
-    anchor:[ 1, relpos, 1, 0 ]
-  });
-
+      endpoint:[ "Dot", { radius:5 } ],
+      isSource:true,
+      isTarget:true,
+      radius: 5,
+      anchor:[ 0, relpos, -1, 0 ]
+    });
   }
 
-  //anchor:[ "Right", { shape:"Square" } ]
+  // Create outputs
+  for(var i = 0 ; i < data.outputs ; i++){
+    // Create the row
+    var e = div.append("div")
+        .attr("class","noderow")
+        .style("height",rowsize + "px")
+        .style("width","100%")
+        //.append("p")
+        // /.text("input");
+
+    if((i % 2) == 1){
+      e.style("background","black")
+    }
+
+
+    var abspos = headersize + rowsize * (i + data.inputs) + rowsize/2;
+
+    var relpos = abspos / totalsize;
+
+    jsPlumb.addEndpoint(div.attr("id"), {
+      endpoint:[ "Dot", { radius:5 } ],
+      isSource:true,
+      isTarget:true,
+      radius: 5,
+      anchor:[1 , relpos, 1, 0 ]
+    });
+  }
 
   nodeAmount++;
 }
