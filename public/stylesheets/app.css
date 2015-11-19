@@ -1,0 +1,16 @@
+.link { stroke: #ccc; }
+.nodetext { pointer-events: none; font: 10px sans-serif; }
+
+#conteneur {
+   padding: 20px;
+   width:80%; height: 200px;
+   border: 1px solid gray;
+   position: relative;
+}
+
+.item {
+   border: 1px solid blue;
+   position: absolute;
+}
+
+hr { width:100%; height:1px; background: #fff }
