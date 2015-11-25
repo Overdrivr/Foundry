@@ -1,21 +1,25 @@
-.link { stroke: #ccc; }
-.nodetext { pointer-events: none; font: 10px sans-serif; }
-
-#conteneur {
-  padding: 20px;
-  width:80%; height: 200px;
-  border: 1px solid gray;
+body {
   position: relative;
-  overflow: hidden;
+  width: 960px;
 }
 
-.item {
-  border: 1px solid blue;
+svg {
+  font: 10px sans-serif;
+  shape-rendering: crispEdges;
+}
+
+rect {
+  fill: #ddd;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #fff;
+}
+
+button {
   position: absolute;
-  z-index: 20;
-}
-
-.jsplumb-endpoint{
-  z-index: 21;
-
+  right: 30px;
+  top: 30px;
 }
