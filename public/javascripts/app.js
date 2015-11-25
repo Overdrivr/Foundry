@@ -19,7 +19,21 @@ jsPlumb.bind("ready", function() {
   // your jsPlumb related init code goes here
   jsPlumb.setContainer("conteneur");
 
+  jsPlumb.draggable("conteneur", {
+    start:function(params) {
+      console.log("start");
+    },
+    drag:function(params) {
+      console.log("inprocess");
+    },
+    stop:function(params) {
+      console.log("stop");
+    }
+  })
+
 });
+
+
 
 function createNode(nodeType){
   // TODO : Avoid calling that every time, also, improve code.
