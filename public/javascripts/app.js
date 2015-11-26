@@ -21,18 +21,17 @@ var yAxis = d3.svg.axis()
     .ticks(5)
     .tickSize(-width);
 
-var zoom = d3.behavior.zoom()
-    .x(x)
-    .y(y)
-    .scaleExtent([1, 10])
-    .on("zoom", zoomed);
+var pan = d3.behavior.drag()
+    .on("drag", maindrag);
 
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
-    .call(zoom);
+    .call(pan);
 
 var master = svg.append("g")
+    .attr("x", 0)
+    .attr("y", 0)
 
     //.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
@@ -53,20 +52,20 @@ svg.append("g")
 
 d3.select("button").on("click", reset);*/
 
-function zoomed() {
+function maindrag() {
   /*
   svg.select(".x.axis").call(xAxis);
   svg.select(".y.axis").call(yAxis);
   */
   var top = d3.select(this).select("g");
-  console.log(top)
-}
+  var x = parseInt(top.attr("x"),10) + d3.event.dx;
+  var y = parseInt(top.attr("y"),10) + d3.event.dy;
 
-function reset() {
-  svg.call(zoom
-      .x(x.domain([-width / 2, width / 2]))
-      .y(y.domain([-height / 2, height / 2]))
-      .event);
+  top
+    .attr("x", x)
+    .attr("y", y)
+    .attr("transform","translate("+x+","+y+")")
+
 }
 
 // Node creation
