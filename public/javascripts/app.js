@@ -19,39 +19,9 @@ var master = d3.select("#tree-body").append("svg")
             .attr("height", 300)
             .call(zoomListener)
           .append("g")
-// apply the zoom behavior to the svg image
 
-/*
-var pan = d3.behavior.zoom()
-    .on("drag", maindrag);
 
-var svg = d3.select("body").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .call(pan);
 
-var master = svg.append("g")
-    .attr("x", 0)
-    .attr("y", 0)
-*/
-    //.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-
-/*
-svg.append("rect")
-    .attr("width", width)
-    .attr("height", height)
-    .style("fill","#ddd")
-
-svg.append("g")
-    .attr("class", "x axis")
-    .attr("transform", "translate(0," + height + ")")
-    .call(xAxis);
-
-svg.append("g")
-    .attr("class", "y axis")
-    .call(yAxis);
-
-d3.select("button").on("click", reset);*/
 
 function maindrag() {
   /*
