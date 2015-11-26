@@ -80,22 +80,55 @@ nodedrag
     d3.select(this)
       .attr("x",d3.event.dx + prex)
       .attr("y",d3.event.dy + prey);
+    d3.select(this)
+      .attr("transform","translate("+prex+","+prey+")");
   })
   .on("dragend",function(){
   })
 
-master.append("rect")
-    .attr("x",10)
-    .attr("y",20)
-    .attr("width", 60)
-    .attr("height", 80)
-    .style("fill","#aaa")
-    .call(nodedrag)
+var node1 = master.append("g")
+              .attr("x",10)
+              .attr("y",20)
+              .call(nodedrag);
 
-master.append("rect")
-    .attr("x",60)
-    .attr("y",80)
+node1.append("rect")
+    .attr("x",0)
+    .attr("y",0)
     .attr("width", 60)
     .attr("height", 80)
     .style("fill","#aaa")
-    .call(nodedrag)
+
+
+var node2 = master.append("g")
+        .attr("x",60)
+        .attr("y",80)
+        .call(nodedrag)
+
+node2.append("rect")
+    .attr("x",0)
+    .attr("y",0)
+    .attr("width", 60)
+    .attr("height", 80)
+    .style("fill","#aaa");
+
+// Anchor creation
+var anchordrag = d3.behavior.drag();
+anchordrag
+  .on("dragstart",function(){
+    d3.event.sourceEvent.stopPropagation();
+    console.log("startanchor");
+  })
+  .on("drag",function(){
+    console.log("movetanchor");
+  })
+  .on("dragend",function(){
+    console.log("endanchor");
+    // Find if there is another anchor at this point
+  })
+
+node1.append("circle")
+    .attr("cx",6)
+    .attr("cy",6)
+    .attr("r", 8)
+    .style("fill","#aea")
+    .call(anchordrag)
