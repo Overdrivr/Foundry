@@ -1,119 +1,94 @@
-var nodeAmount = 0;
+var margin = {top: 20, right: 20, bottom: 30, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
 
-var nodelist = {
-  "perlin":{
-    "name":"perlin",
-    "inputs":5,
-    "outputs":3
-  },
-  "simplex":{
-    "name":"simplex",
-    "inputs":2,
-    "outputs":1
-  }
-};
+var x = d3.scale.linear()
+    .domain([-width / 2, width / 2])
+    .range([0, width]);
 
+var y = d3.scale.linear()
+    .domain([-height / 2, height / 2])
+    .range([height, 0]);
 
-jsPlumb.bind("ready", function() {
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom")
+    .tickSize(-height);
 
-  // your jsPlumb related init code goes here
-  jsPlumb.setContainer("conteneur");
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+    .ticks(5)
+    .tickSize(-width);
 
-});
+var zoom = d3.behavior.zoom()
+    .x(x)
+    .y(y)
+    .scaleExtent([1, 10])
+    .on("zoom", zoomed);
 
-function createNode(nodeType){
-  // TODO : Avoid calling that every time, also, improve code.
-  // For testing only
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .call(zoom);
 
-  console.log(nodelist)
+var master = svg.append("g")
 
-  var data = nodelist[nodeType];
+    //.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
-  // Todo : Check node exists
+/*
+svg.append("rect")
+    .attr("width", width)
+    .attr("height", height)
+    .style("fill","#ddd")
 
-  console.log(data);
+svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis);
 
-  jsPlumb.setContainer("conteneur");
+svg.append("g")
+    .attr("class", "y axis")
+    .call(yAxis);
 
+d3.select("button").on("click", reset);*/
 
-  var headersize = 30;
-  var rowsize = 20;
-  var totalsize = headersize + rowsize * (data.inputs + data.outputs)
-
-  var body = d3.select("div.cont");
-
-  // Create node
-  var div = body.append("div")
-              .attr("class","item")
-              .attr("id","node" + nodeAmount)
-              .style("height",totalsize + "px")
-              .style("width", "80px");
-  // Make the node draggable
-  jsPlumb.draggable(div.attr("id"));
-  // Create header
-  var header = div.append("div")
-                .attr("class","nodetitle")
-                .style("height",headersize + "px")
-                //.append("p")
-                //.text("Perlin2D");
-
-
-  // Create inputs
-  for(var i = 0 ; i < data.inputs ; i++){
-    // Create the row
-    var e = div.append("div")
-        .attr("class","noderow")
-        .style("height",rowsize + "px")
-        .style("width","100%")
-        //.append("p")
-        // /.text("input");
-
-    if((i % 2) == 0){
-      e.style("background","black")
-    }
-
-
-    var abspos = headersize + rowsize * i + rowsize/2;
-
-    var relpos = abspos / totalsize;
-    console.log(i,abspos)
-
-    jsPlumb.addEndpoint(div.attr("id"), {
-      endpoint:[ "Dot", { radius:5 } ],
-      isSource:true,
-      isTarget:true,
-      radius: 5,
-      anchor:[ 0, relpos, -1, 0 ]
-    });
-  }
-
-  // Create outputs
-  for(var i = 0 ; i < data.outputs ; i++){
-    // Create the row
-    var e = div.append("div")
-        .attr("class","noderow")
-        .style("height",rowsize + "px")
-        .style("width","100%")
-        //.append("p")
-        // /.text("input");
-
-    if((i % 2) == 1){
-      e.style("background","black")
-    }
-
-
-    var abspos = headersize + rowsize * (i + data.inputs) + rowsize/2;
-
-    var relpos = abspos / totalsize;
-
-    jsPlumb.addEndpoint(div.attr("id"), {
-      endpoint:[ "Dot", { radius:5 } ],
-      isSource:true,
-      isTarget:true,
-      radius: 5,
-      anchor:[1 , relpos, 1, 0 ]
-    });
-  }
-
-  nodeAmount++;
+function zoomed() {
+  /*
+  svg.select(".x.axis").call(xAxis);
+  svg.select(".y.axis").call(yAxis);
+  */
+  var top = d3.select(this).select("g");
+  console.log(top)
 }
+
+function reset() {
+  svg.call(zoom
+      .x(x.domain([-width / 2, width / 2]))
+      .y(y.domain([-height / 2, height / 2]))
+      .event);
+}
+
+// Node creation
+var nodedrag = d3.behavior.drag();
+nodedrag
+  .on("dragstart",function(){
+    d3.event.sourceEvent.stopPropagation();
+  })
+  .on("drag",function(){
+    var prex = parseInt(d3.select(this).attr("x"),10);
+    var prey = parseInt(d3.select(this).attr("y"),10);
+    d3.select(this)
+      .attr("x",d3.event.dx + prex)
+      .attr("y",d3.event.dy + prey);
+  })
+  .on("dragend",function(){
+  })
+
+master.append("rect")
+    .attr("x",10)
+    .attr("y",20)
+    .attr("width", 60)
+    .attr("height", 80)
+    .style("fill","#aaa")
+    .call(nodedrag)
