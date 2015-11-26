@@ -19,17 +19,18 @@ jsPlumb.bind("ready", function() {
   // your jsPlumb related init code goes here
   jsPlumb.setContainer("conteneur");
 
-  jsPlumb.draggable("conteneur", {
-    start:function(params) {
-      console.log("start");
-    },
-    drag:function(params) {
-      console.log("inprocess");
-    },
-    stop:function(params) {
-      console.log("stop");
-    }
-  })
+  // Create pan-zoom drag manager
+  var panzoom = d3.behavior.drag();
+
+  panzoom.on("drag",function(){
+    d3.select("div.cont").selectAll("*")
+        .style("transform","translate("+d3.event.dx+"px,"+d3.event.dy+"px)");
+    console.log(d3.event);
+  });
+
+  // Catch drag events in conteneur
+  d3.select("div.cont")
+      .call(panzoom)
 
 });
 
