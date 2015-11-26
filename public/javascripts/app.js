@@ -117,6 +117,11 @@ anchordrag
   .on("dragstart",function(){
     d3.event.sourceEvent.stopPropagation();
     console.log("startanchor");
+    master.append("path")
+      .attr("d","M 10 25 L 10 75 L 60 75 L 10 25")
+      .style("stroke","red")
+      .style("stroke-width","2")
+      .style("fill","none");
   })
   .on("drag",function(){
     console.log("movetanchor");
