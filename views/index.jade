@@ -2,8 +2,9 @@ extends layout
 
 block content
   h1= title
-  script(type="text/javascript" src="javascripts/app.js")
+  
   input(id="perlin" type="button" value="Perlin" onclick="createNode('perlin');")
   input(id="simplex" type="button" value="Simplex" onclick="createNode('simplex');")
-  
-  
+  #tree-body
+  script(type="text/javascript" src="d3/d3.js")
+  script(type="text/javascript" src="javascripts/app.js")

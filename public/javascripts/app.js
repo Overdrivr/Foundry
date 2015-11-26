@@ -1,27 +1,28 @@
-var margin = {top: 20, right: 20, bottom: 30, left: 40},
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
 
-var x = d3.scale.linear()
-    .domain([-width / 2, width / 2])
-    .range([0, width]);
+// create the zoom listener
+var zoomListener = d3.behavior.zoom()
+  .scaleExtent([0.1, 3])
+  .on("zoom", zoomHandler);
 
-var y = d3.scale.linear()
-    .domain([-height / 2, height / 2])
-    .range([height, 0]);
+// function for handling zoom event
+function zoomHandler() {
+  console.log(d3.event.translate)
 
-var xAxis = d3.svg.axis()
-    .scale(x)
-    .orient("bottom")
-    .tickSize(-height);
+  d3.select(this).select("g").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+}
 
-var yAxis = d3.svg.axis()
-    .scale(y)
-    .orient("left")
-    .ticks(5)
-    .tickSize(-width);
+console.log(d3.select(".graph"))
 
-var pan = d3.behavior.drag()
+// create the svg
+var master = d3.select("#tree-body").append("svg")
+            .attr("width", 800)
+            .attr("height", 300)
+            .call(zoomListener)
+          .append("g")
+// apply the zoom behavior to the svg image
+
+/*
+var pan = d3.behavior.zoom()
     .on("drag", maindrag);
 
 var svg = d3.select("body").append("svg")
@@ -32,7 +33,7 @@ var svg = d3.select("body").append("svg")
 var master = svg.append("g")
     .attr("x", 0)
     .attr("y", 0)
-
+*/
     //.attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
 /*
@@ -113,21 +114,22 @@ node2.append("rect")
 
 // Anchor creation
 var anchordrag = d3.behavior.drag();
+var currentpath;
 anchordrag
   .on("dragstart",function(){
     d3.event.sourceEvent.stopPropagation();
-    console.log("startanchor");
-    master.append("path")
-      .attr("d","M 10 25 L 10 75 L 60 75 L 10 25")
+    console.log(d3.event.sourceEvent.x,d3.event.sourceEvent.y);
+    var currentpath = master.append("path")
+      .attr("d","M"+d3.event.sourceEvent.x+" "+d3.event.sourceEvent.y+" L 10 75")
       .style("stroke","red")
       .style("stroke-width","2")
       .style("fill","none");
   })
   .on("drag",function(){
-    console.log("movetanchor");
+    //console.log("movetanchor");
   })
   .on("dragend",function(){
-    console.log("endanchor");
+    //console.log("endanchor");
     // Find if there is another anchor at this point
   })
 
