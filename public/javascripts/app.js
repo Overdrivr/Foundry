@@ -70,11 +70,14 @@ anchordrag
 
     var x = d3.select(this).attr("cx");
     var y = d3.select(this).attr("cy");
-    console.log(x,y)
+
+    coords = getTransformedCoords(x,y,this.getCTM());
+    console.log(coords.x, coords.y);
+
     currentpath = master.append("path")
-      .attr("d","M"+x+" "+y+" L 0 0")
-      .attr("startx",x)
-      .attr("starty",y)
+      .attr("d","M"+coords.x+" "+coords.y+" L 0 0")
+      .attr("startx",coords.x)
+      .attr("starty",coords.y)
       .style("stroke","red")
       .style("stroke-width","2")
       .style("fill","none");
@@ -109,7 +112,7 @@ node1.append("circle")
 
 // The magic function.
 function getTransformedCoords(x, y, ctm) {
-    var xn = - ctm.e + x * ctm.a;
-    var yn = - ctm.f + y * ctm.d;
+    var xn = ctm.e + x * ctm.a;
+    var yn = ctm.f + y * ctm.d;
     return { x: xn, y: yn };
 }
