@@ -90,7 +90,7 @@ anchordrag
 
     coords = getTransformedCoords(x,y,this.getCTM());
 
-    // temporary
+    // TODO: temporary
     var currentpath = master.select("path");
 
 
@@ -103,20 +103,57 @@ anchordrag
     //console.log("movetanchor");
   })
   .on("dragend",function(){
-    //console.log("endanchor");
-    // Find if there is another anchor at this point
+    var x = d3.mouse(this)[0];
+    var y = d3.mouse(this)[1];
+    var ctm = this.getCTM();
+    coords = getTransformedCoords(x,y,ctm);
+
+    var selectedAnchors = []
+
+    // Select all anchors
+    var anchors = d3.selectAll(".anchor");
+    // TODO : Except the start anchor
+
+    // Check if released mouse position is within an anchor
+    anchors.each(function(){
+      c = getTransformedCoords(d3.select(this).attr("cx"),d3.select(this).attr("cy"),ctm);
+      var d = distanceToAnchor(coords.x,coords.y,c.x,c.y)
+      if(d <= d3.select(this).attr("r")) {
+        console.log("Found anchor");
+        selectedAnchors.push(d3.select(this));
+      }
+    });
+
+    // Check if at least one anchor was found
+    if(selectedAnchors.length > 0){
+      // Connection established !
+      console.log("Connection established.");
+    }
+    else {
+      // Destroy path
+      console.log("Connection failed.")
+      // TODO: temporary
+      var currentpath = master.select("path").remove();
+    }
   })
 
+
 node1.append("circle")
+    .attr("class","anchor")
     .attr("cx",6)
     .attr("cy",6)
     .attr("r", 8)
     .style("fill","#aea")
     .call(anchordrag)
 
+
 // The magic function.
 function getTransformedCoords(x, y, ctm) {
     var xn = ctm.e + x * ctm.a;
     var yn = ctm.f + y * ctm.d;
     return { x: xn, y: yn };
+}
+
+function distanceToAnchor(x,y,cx,cy){
+  return Math.sqrt((cx - x)*(cx - x) + (cy - y)*(cy - y));
 }
