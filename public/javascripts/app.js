@@ -75,7 +75,7 @@ anchordrag
     console.log(coords.x, coords.y);
 
     currentpath = master.append("path")
-      .attr("d","M"+coords.x+" "+coords.y+" L 0 0")
+      .attr("d","M"+coords.x+" "+coords.y+" L"+coords.x+" "+coords.y)
       .attr("startx",coords.x)
       .attr("starty",coords.y)
       .style("stroke","red")
@@ -87,13 +87,17 @@ anchordrag
 
     var x = d3.mouse(this)[0];
     var y = d3.mouse(this)[1];
+
+    coords = getTransformedCoords(x,y,this.getCTM());
+
     // temporary
     var currentpath = master.select("path");
-    console.log(d3.mouse(this))
+
+
     var startx = currentpath.attr("startx");
     var starty = currentpath.attr("starty");
     currentpath
-      .attr("d","M"+ startx + " " + starty + " L" + x + " " + y)
+      .attr("d","M"+ startx + " " + starty + " L" + coords.x + " " + coords.y)
 
 
     //console.log("movetanchor");
