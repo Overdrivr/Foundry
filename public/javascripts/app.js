@@ -6,12 +6,8 @@ var zoomListener = d3.behavior.zoom()
 
 // function for handling zoom event
 function zoomHandler() {
-  console.log(d3.event.translate)
-
   d3.select(this).select("g").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 }
-
-console.log(d3.select(".graph"))
 
 // create the svg
 var master = d3.select("#tree-body").append("svg")
@@ -19,25 +15,8 @@ var master = d3.select("#tree-body").append("svg")
             .attr("height", 300)
             .call(zoomListener)
           .append("g")
+          .attr("transform","translate(0,0) scale(1)");
 
-
-
-
-function maindrag() {
-  /*
-  svg.select(".x.axis").call(xAxis);
-  svg.select(".y.axis").call(yAxis);
-  */
-  var top = d3.select(this).select("g");
-  var x = parseInt(top.attr("x"),10) + d3.event.dx;
-  var y = parseInt(top.attr("y"),10) + d3.event.dy;
-
-  top
-    .attr("x", x)
-    .attr("y", y)
-    .attr("transform","translate("+x+","+y+")")
-
-}
 
 // Node creation
 var nodedrag = d3.behavior.drag();
@@ -84,18 +63,36 @@ node2.append("rect")
 
 // Anchor creation
 var anchordrag = d3.behavior.drag();
-var currentpath;
+
 anchordrag
   .on("dragstart",function(){
     d3.event.sourceEvent.stopPropagation();
-    console.log(d3.event.sourceEvent.x,d3.event.sourceEvent.y);
-    var currentpath = master.append("path")
-      .attr("d","M"+d3.event.sourceEvent.x+" "+d3.event.sourceEvent.y+" L 10 75")
+
+    var x = d3.select(this).attr("cx");
+    var y = d3.select(this).attr("cy");
+    console.log(x,y)
+    currentpath = master.append("path")
+      .attr("d","M"+x+" "+y+" L 0 0")
+      .attr("startx",x)
+      .attr("starty",y)
       .style("stroke","red")
       .style("stroke-width","2")
       .style("fill","none");
   })
   .on("drag",function(){
+
+
+    var x = d3.mouse(this)[0];
+    var y = d3.mouse(this)[1];
+    // temporary
+    var currentpath = master.select("path");
+    console.log(d3.mouse(this))
+    var startx = currentpath.attr("startx");
+    var starty = currentpath.attr("starty");
+    currentpath
+      .attr("d","M"+ startx + " " + starty + " L" + x + " " + y)
+
+
     //console.log("movetanchor");
   })
   .on("dragend",function(){
@@ -109,3 +106,10 @@ node1.append("circle")
     .attr("r", 8)
     .style("fill","#aea")
     .call(anchordrag)
+
+// The magic function.
+function getTransformedCoords(x, y, ctm) {
+    var xn = - ctm.e + x * ctm.a;
+    var yn = - ctm.f + y * ctm.d;
+    return { x: xn, y: yn };
+}

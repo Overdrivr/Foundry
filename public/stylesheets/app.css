@@ -8,7 +8,7 @@ svg {
   shape-rendering: crispEdges;
   border: solid black 1px;
 }
-
+/*
 rect {
 
 }
@@ -20,7 +20,7 @@ rect {
 }
 
 button {
-  position: absolute;
   right: 30px;
   top: 30px;
 }
+*/
