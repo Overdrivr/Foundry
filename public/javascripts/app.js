@@ -36,9 +36,14 @@ nodedrag
   .on("dragend",function(){
   })
 
+// Create first node
+var nodex = 10;
+var nodey = 20;
+
 var node1 = master.append("g")
-              .attr("x",10)
-              .attr("y",20)
+              .attr("x",nodex)
+              .attr("y",nodey)
+              .attr("transform","translate("+ nodex +","+ nodey +")")
               .call(nodedrag);
 
 node1.append("rect")
@@ -49,9 +54,13 @@ node1.append("rect")
     .style("fill","#aaa")
 
 
+// Create second node
+nodex = 100;
+nodey = 160;
 var node2 = master.append("g")
-        .attr("x",60)
-        .attr("y",80)
+        .attr("x",nodex)
+        .attr("y",nodey)
+        .attr("transform","translate("+ nodex +","+ nodey +")")
         .call(nodedrag)
 
 node2.append("rect")
