@@ -94,10 +94,11 @@ anchordrag
   .on("drag",function(){
 
 
-    var x = d3.mouse(this)[0];
-    var y = d3.mouse(this)[1];
+    var x = d3.mouse(this.parentNode.parentNode)[0];
+    var y = d3.mouse(this.parentNode.parentNode)[1];
+    console.log(x,y)
 
-    coords = getTransformedCoords(x,y,this.getCTM());
+    //coords = getTransformedCoords(x,y,this.getCTM());
 
     // TODO: temporary
     var currentpath = master.select("path");
@@ -106,7 +107,7 @@ anchordrag
     var startx = currentpath.attr("startx");
     var starty = currentpath.attr("starty");
     currentpath
-      .attr("d","M"+ startx + " " + starty + " L" + coords.x + " " + coords.y)
+      .attr("d","M"+ startx + " " + starty + " L" + x + " " + y)
 
 
     //console.log("movetanchor");
@@ -156,11 +157,13 @@ node1.append("circle")
     .call(anchordrag)
 
 
-// The magic function.
 function getTransformedCoords(x, y, ctm) {
-    var xn = ctm.e + x * ctm.a;
-    var yn = ctm.f + y * ctm.d;
-    return { x: xn, y: yn };
+    var xn = x * ctm.a + y * ctm.c + ctm.e;
+    var yn = x * ctm.b + y * ctm.d + ctm.f;
+    return {
+      x: xn,
+      y: yn
+    };
 }
 
 function distanceToAnchor(x,y,cx,cy){
