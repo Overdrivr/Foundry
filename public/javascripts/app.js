@@ -41,7 +41,7 @@ nodedrag
     // TODO: Select all anchors associated with this node
 
     // TODO: Select all associated connections
-    
+
     // TODO: Update connections to match the new dragged position
   })
   .on("dragend",function(){
@@ -177,10 +177,8 @@ anchordrag
       currentpath.attr("endanchor",selectedAnchors[0].attr("id"))
     }
     else {
-      // Destroy path
-      console.log("Connection failed.")
-      // TODO: temporary
-      var currentpath = master.select("path").remove();
+      // Drag did not end close enough to an anchor, so remove path    
+      currentpath.remove();
     }
 
     currentConnectionId = -1;
