@@ -86,7 +86,7 @@ anchordrag
     var y = d3.select(this).attr("cy");
 
     coords = getTransformedCoords(x,y,this.getCTM());
-    console.log(coords.x, coords.y);
+    //console.log(coords.x, coords.y);
 
     currentpath = master.append("path")
       .attr("d","M"+coords.x+" "+coords.y+" L"+coords.x+" "+coords.y)
@@ -120,22 +120,29 @@ anchordrag
   .on("dragend",function(){
     var x = d3.mouse(this)[0];
     var y = d3.mouse(this)[1];
+
     var ctm = this.getCTM();
+    // Convert mouse release coordinates to nearest <svg>
     coords = getTransformedCoords(x,y,ctm);
 
+    // List of connection candidates
     var selectedAnchors = []
 
     // Select all anchors
     var anchors = d3.selectAll(".anchor");
-    console.log(anchors)
+
     // TODO : Except the start anchor
 
     // Check if released mouse position is within an anchor
     anchors.each(function(){
+      // Convert anchor position relative to nearest <svg>
+      ctm = this.parentNode.getCTM();
       c = getTransformedCoords(d3.select(this).attr("cx"),d3.select(this).attr("cy"),ctm);
+      // Compute mouse release distance to anchor
       var d = distanceToAnchor(coords.x,coords.y,c.x,c.y)
+
+      // Found a connection anchor candidate
       if(d <= d3.select(this).attr("r")) {
-        console.log("Found anchor");
         selectedAnchors.push(d3.select(this));
       }
     });
