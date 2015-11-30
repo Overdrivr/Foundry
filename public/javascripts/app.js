@@ -44,10 +44,14 @@ nodedrag
 // Create first node
 var nodex = 10;
 var nodey = 20;
+var nodeids = 0;
+var anchorids = 0;
+var connectionids = 0;
 
 var node1 = master.append("g")
               .attr("x",nodex)
               .attr("y",nodey)
+              .attr("id",nodeids++)
               .attr("transform","translate("+ nodex +","+ nodey +")")
               .call(nodedrag);
 
@@ -65,6 +69,7 @@ nodey = 160;
 var node2 = master.append("g")
         .attr("x",nodex)
         .attr("y",nodey)
+        .attr("id",nodeids++)
         .attr("transform","translate("+ nodex +","+ nodey +")")
         .call(nodedrag)
 
@@ -77,6 +82,8 @@ node2.append("rect")
 
 // Anchor creation
 var anchordrag = d3.behavior.drag();
+var currentConnectionId = -1;
+var connections = [];
 
 anchordrag
   .on("dragstart",function(){
@@ -86,9 +93,12 @@ anchordrag
     var y = d3.select(this).attr("cy");
 
     coords = getTransformedCoords(x,y,this.getCTM());
-    //console.log(coords.x, coords.y);
+
+    currentConnectionId = connectionids;
 
     currentpath = master.append("path")
+      .attr("startanchor",d3.select(this).attr("id"))
+      .attr("id","P" + connectionids++)
       .attr("d","M"+coords.x+" "+coords.y+" L"+coords.x+" "+coords.y)
       .attr("startx",coords.x)
       .attr("starty",coords.y)
@@ -97,25 +107,23 @@ anchordrag
       .style("fill","none");
   })
   .on("drag",function(){
-
-
     var x = d3.mouse(this.parentNode.parentNode)[0];
     var y = d3.mouse(this.parentNode.parentNode)[1];
-    //console.log(x,y)
 
-    //coords = getTransformedCoords(x,y,this.getCTM());
+    // Select currently dragged path
+    var currentpath = master.select("#P" + currentConnectionId + "");
 
-    // TODO: temporary
-    var currentpath = master.select("path");
-
+    if(currentpath[0][0] == null){
+      console.error("on drag : Current path with id #P"+currentConnectionId+" not found.");
+      return;
+    }
 
     var startx = currentpath.attr("startx");
     var starty = currentpath.attr("starty");
     currentpath
-      .attr("d","M"+ startx + " " + starty + " L" + x + " " + y)
+      .attr("d","M"+ startx + " " + starty + " L" + x + " " + y);
 
 
-    //console.log("movetanchor");
   })
   .on("dragend",function(){
     var x = d3.mouse(this)[0];
@@ -124,6 +132,14 @@ anchordrag
     var ctm = this.getCTM();
     // Convert mouse release coordinates to nearest <svg>
     coords = getTransformedCoords(x,y,ctm);
+
+    // Select currently dragged path
+    var currentpath = master.select("#P" + currentConnectionId + "");
+
+    if(currentpath[0][0] == null){
+      console.error("on dragend : Current path with id #P"+currentConnectionId+" not found.");
+      return;
+    }
 
     // List of connection candidates
     var selectedAnchors = []
@@ -151,6 +167,8 @@ anchordrag
     if(selectedAnchors.length > 0){
       // Connection established !
       console.log("Connection established.");
+      console.log(selectedAnchors)
+      currentpath.attr("endanchor",selectedAnchors[0].attr("id"))
     }
     else {
       // Destroy path
@@ -158,6 +176,8 @@ anchordrag
       // TODO: temporary
       var currentpath = master.select("path").remove();
     }
+
+    currentConnectionId = -1;
   })
 
 
@@ -166,6 +186,7 @@ node1.append("circle")
     .attr("cx",6)
     .attr("cy",6)
     .attr("r", 8)
+    .attr("id",anchorids++)
     .style("fill","#aea")
     .call(anchordrag)
 
@@ -174,6 +195,7 @@ node2.append("circle")
     .attr("cx",6)
     .attr("cy",24)
     .attr("r", 8)
+    .attr("id",anchorids++)
     .style("fill","#aea")
     .call(anchordrag)
 
