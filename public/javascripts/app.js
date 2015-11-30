@@ -6,16 +6,21 @@ var zoomListener = d3.behavior.zoom()
 
 // function for handling zoom event
 function zoomHandler() {
-  d3.select(this).select("g").attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+  d3.select(this).select("g")
+    .attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 }
 
 // create the svg
-var master = d3.select("#tree-body").append("svg")
+var container = d3.select("#tree-body").append("svg")
             .attr("width", 800)
             .attr("height", 300)
             .call(zoomListener)
-          .append("g")
-          .attr("transform","translate(0,0) scale(1)");
+            .append("g")
+            .attr("x",0)
+            .attr("y",0);
+
+var master = container.append("svg")
+                  .attr("overflow","visible");
 
 
 // Node creation
@@ -96,7 +101,7 @@ anchordrag
 
     var x = d3.mouse(this.parentNode.parentNode)[0];
     var y = d3.mouse(this.parentNode.parentNode)[1];
-    console.log(x,y)
+    //console.log(x,y)
 
     //coords = getTransformedCoords(x,y,this.getCTM());
 
