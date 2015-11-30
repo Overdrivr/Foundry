@@ -127,6 +127,7 @@ anchordrag
 
     // Select all anchors
     var anchors = d3.selectAll(".anchor");
+    console.log(anchors)
     // TODO : Except the start anchor
 
     // Check if released mouse position is within an anchor
@@ -161,6 +162,13 @@ node1.append("circle")
     .style("fill","#aea")
     .call(anchordrag)
 
+node2.append("circle")
+    .attr("class","anchor")
+    .attr("cx",6)
+    .attr("cy",24)
+    .attr("r", 8)
+    .style("fill","#aea")
+    .call(anchordrag)
 
 function getTransformedCoords(x, y, ctm) {
     var xn = x * ctm.a + y * ctm.c + ctm.e;
