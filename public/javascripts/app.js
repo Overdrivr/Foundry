@@ -37,11 +37,15 @@ var config = {
   }
 };
 
+var type = [];
+type['isInput'] = true;
+
 var node1 = appendNode(master,config);
 var node2 = appendNode(master,config);
 
-addAnchor(node1);
-addAnchor(node2);
+addAnchor(node1, 0, 10, "Scale", type);
+addAnchor(node1, 0, 30, "Wavelength", type);
+addAnchor(node2, 0, 10, "Distorsion", type);
 
 
 function getTransformedCoords(x, y, ctm) {
