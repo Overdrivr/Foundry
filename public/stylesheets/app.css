@@ -1,16 +1,26 @@
-.link { stroke: #ccc; }
-.nodetext { pointer-events: none; font: 10px sans-serif; }
-
-#conteneur {
-   padding: 20px;
-   width:80%; height: 200px;
-   border: 1px solid gray;
-   position: relative;
+body {
+  position: relative;
+  width: 960px;
 }
 
-.item {
-   border: 1px solid blue;
-   position: absolute;
+svg {
+  font: 10px sans-serif;
+  shape-rendering: crispEdges;
+  border: solid black 1px;
+}
+/*
+rect {
+
 }
 
-hr { width:100%; height:1px; background: #fff }
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #fff;
+}
+
+button {
+  right: 30px;
+  top: 30px;
+}
+*/
