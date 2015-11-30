@@ -30,19 +30,37 @@ nodedrag
     d3.event.sourceEvent.stopPropagation();
   })
   .on("drag",function(){
-    var prex = parseInt(d3.select(this).attr("x"),10);
-    var prey = parseInt(d3.select(this).attr("y"),10);
-    d3.select(this)
-      .attr("x",d3.event.dx + prex)
-      .attr("y",d3.event.dy + prey);
-    d3.select(this)
-      .attr("transform","translate("+prex+","+prey+")");
+    var x = parseInt(d3.select(this).attr("x"),10) + d3.event.dx;
+    var y = parseInt(d3.select(this).attr("y"),10) + d3.event.dy;
+    var node = d3.select(this)
+      .attr("x", x)
+      .attr("y", y)
+      .attr("transform","translate("+x+","+y+")");
 
-    // TODO: Select all anchors associated with this node
+    // Select all anchors associated with this node
+    var anchors = node.selectAll(".anchor");
 
-    // TODO: Select all associated connections
-    
-    // TODO: Update connections to match the new dragged position
+    // Select all associated connections
+    anchors.each(function(){
+      c = getTransformedCoords(d3.select(this).attr("cx"),d3.select(this).attr("cy"),this.getCTM());
+      // Start anchors
+      var connectionsToUpdate = master.selectAll("path[startanchor='"+d3.select(this).attr("id")+"']")
+                .each(function(){
+                    // Update connections to match the new dragged position
+                    var segments = this.pathSegList;
+                    segments.getItem(0).x = c.x;
+                    segments.getItem(0).y = c.y;
+                });
+      // End anchors
+      var connectionsToUpdate = master.selectAll("path[endanchor='"+d3.select(this).attr("id")+"']")
+                .each(function(){
+                    // Update connections to match the new dragged position
+                    var segments = this.pathSegList;
+                    // TODO: Index -1 ?
+                    segments.getItem(1).x = c.x;
+                    segments.getItem(1).y = c.y;
+                });
+    });
   })
   .on("dragend",function(){
   })
@@ -177,10 +195,8 @@ anchordrag
       currentpath.attr("endanchor",selectedAnchors[0].attr("id"))
     }
     else {
-      // Destroy path
-      console.log("Connection failed.")
-      // TODO: temporary
-      var currentpath = master.select("path").remove();
+      // Drag did not end close enough to an anchor, so remove path
+      currentpath.remove();
     }
 
     currentConnectionId = -1;
