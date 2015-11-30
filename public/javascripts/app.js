@@ -37,6 +37,12 @@ nodedrag
       .attr("y",d3.event.dy + prey);
     d3.select(this)
       .attr("transform","translate("+prex+","+prey+")");
+
+    // TODO: Select all anchors associated with this node
+
+    // TODO: Select all associated connections
+    
+    // TODO: Update connections to match the new dragged position
   })
   .on("dragend",function(){
   })
