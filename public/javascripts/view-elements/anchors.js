@@ -18,7 +18,7 @@ function addAnchor(node, x, y, name, type){
             .text(name);
 
   var textlength = t[0][0].getComputedTextLength();
-  var xoffset = type.isInput ? - textlength - 10 : textlength + 10;
+  var xoffset = type.isInput ? 10 : - textlength - 10;
   var yoffset = radius / 2;
 
   t.attr("x", x + xoffset)
