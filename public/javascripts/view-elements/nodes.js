@@ -9,23 +9,62 @@ var nodeids = 0;
   *
   */
 function appendNode(parent, config){
-  console.log(Object.keys(config.inputs).length)
-
+  //console.log(Object.keys(config.inputs).length)
+  var nodewidth = 80;
+  // Create the g
   var n = parent.append("g");
-  
+
   n.attr("x",nodex)
     .attr("y",nodey)
     .attr("id",nodeids++)
     .attr("transform","translate("+ nodex +","+ nodey +")")
     .call(nodedrag);
-
+  // Append background
   n.append("rect")
       .attr("x",0)
       .attr("y",0)
-      .attr("width", 60)
-      .attr("height", 80)
+      .attr("width", nodewidth)
+      .attr("height", 120)
       .style("fill","#aaa");
 
+  // Add title
+  var title = n.append("text")
+      .attr("font-family","Roboto")
+      .attr("text-anchor","middle")
+      .attr("font-size",20)
+      .text(config.title);
+  // Compute title size
+  var dimensions = title[0][0].getBBox();
+
+  var headerheight = dimensions.height;
+
+  title
+    .attr("x", nodewidth/2)
+    .attr("y",dimensions.height * 0.75)
+
+  n.append("line")
+      .attr("stroke-width",1.5)
+      .attr("stroke","black")
+      .attr("x1", 2)
+      .attr("x2", nodewidth - 2)
+      .attr("y1", dimensions.height)
+      .attr("y2", dimensions.height);
+
+  // Append foreign object to host html elements (intrinsic node UI)
+  n.append("foreignObject")
+      .attr("width","90%")
+      .attr("height","100%");
+  //  .append("body")
+
+
+  // Create anchors
+  var type = [];
+  type['isInput'] = true;
+
+  //addAnchor(node1, 0, 10, "scale", type);
+  //addAnchor(node1, 0, 30, "wavelength", type);
+  type['isInput'] = false;
+  //addAnchor(node1, 80, 50, "output", type);
   return n;
 }
 
