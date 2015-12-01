@@ -11,6 +11,9 @@ var nodeids = 0;
 function appendNode(parent, config){
   //console.log(Object.keys(config.inputs).length)
   var nodewidth = 80;
+  var nodeheight = 180;
+  var vpadding = 3;
+  var IOy = 20;
   // Create the g
   var n = parent.append("g");
 
@@ -24,9 +27,10 @@ function appendNode(parent, config){
       .attr("x",0)
       .attr("y",0)
       .attr("width", nodewidth)
-      .attr("height", 120)
+      .attr("height", nodeheight)
       .style("fill","#aaa");
 
+  /// HEADER ///
   // Add title
   var title = n.append("text")
       .attr("font-family","Roboto")
@@ -42,29 +46,56 @@ function appendNode(parent, config){
     .attr("x", nodewidth/2)
     .attr("y",dimensions.height * 0.75)
 
+  // Add title separator
   n.append("line")
-      .attr("stroke-width",1.5)
+      .attr("stroke-width",2)
       .attr("stroke","black")
       .attr("x1", 2)
       .attr("x2", nodewidth - 2)
-      .attr("y1", dimensions.height)
-      .attr("y2", dimensions.height);
+      .attr("y1", dimensions.height + vpadding)
+      .attr("y2", dimensions.height + vpadding);
 
-  // Append foreign object to host html elements (intrinsic node UI)
-  n.append("foreignObject")
-      .attr("width","90%")
-      .attr("height","100%");
-  //  .append("body")
+  /// IOs ///
+  // Compute IOs size
+  var inputAmount = Object.keys(config.inputs).length;
+  var outputAmount = Object.keys(config.outputs).length;
 
-
-  // Create anchors
+  var IOheight = (Math.max(inputAmount,outputAmount) + 1) * IOy;
+  console.log("heigth",IOheight)
+  // Place IO anchors
   var type = [];
   type['isInput'] = true;
+  var i = 1;
 
-  //addAnchor(node1, 0, 10, "scale", type);
-  //addAnchor(node1, 0, 30, "wavelength", type);
-  type['isInput'] = false;
-  //addAnchor(node1, 80, 50, "output", type);
+  for (var key in config.inputs) {
+    if (!config.inputs.hasOwnProperty(key)) {
+        continue;
+    }
+
+    var x = 0;
+    var y = dimensions.height + vpadding + i * IOy;
+    i++;
+    addAnchor(n,x,y,key,type);
+  }
+
+
+  // Add IO separator
+  n.append("line")
+      .attr("stroke-width",2)
+      .attr("stroke","black")
+      .attr("x1", 2)
+      .attr("x2", nodewidth - 2)
+      .attr("y1", dimensions.height + IOheight + vpadding)
+      .attr("y2", dimensions.height + IOheight + vpadding);
+
+  /// PARAMETERS ///
+  // Append foreign object to host html elements (intrinsic node UI)
+  n.append("foreignObject")
+      .attr("width",nodewidth)
+      .attr("height", nodeheight - (dimensions.height + IOheight + vpadding))
+      .attr("x",0)
+      .attr("y",dimensions.height + IOheight + vpadding)
+  //  .append("body")
   return n;
 }
 
