@@ -3,6 +3,54 @@ var nodex = 10;
 var nodey = 20;
 var nodeids = 0;
 
+var perlin = {
+  "title": "perlin",
+  "inputs":{
+    "coords":"float,float",
+    "scale":"float"
+  },
+  "outputs":{
+    "density":"float"
+  }
+};
+
+var simplex = {
+  "title": "simplex",
+  "inputs":{
+    "coords":"float,float",
+    "scale":"float"
+  },
+  "outputs":{
+    "density":"float"
+  }
+};
+
+var preview = {
+  "title": "preview",
+  "inputs":{
+    "color":"color",
+    "coords":"float,float"
+  },
+  "outputs":{
+  }
+};
+
+ /*
+  * Create "preview" node
+  *
+  */
+
+function addNodePreview(master){
+  var n = appendNode(master,preview);
+  n.append("image")
+      .attr("xlink:href","https://raw.githubusercontent.com/Overdrivr/ZNoise/master/example-images/simplex2d.bmp")
+      .attr("x", 2)
+      .attr("y", 140)
+      .attr("height","50px")
+      .attr("width","50px");
+}
+
+
  /*
   *  Node creation function
   *
@@ -103,14 +151,6 @@ function appendNode(parent, config){
       .attr("y1", dimensions.height + IOheight + vpadding)
       .attr("y2", dimensions.height + IOheight + vpadding);
 
-  /// PARAMETERS ///
-  // Append foreign object to host html elements (intrinsic node UI)
-  n.append("foreignObject")
-      .attr("width",nodewidth)
-      .attr("height", nodeheight - (dimensions.height + IOheight + vpadding))
-      .attr("x",0)
-      .attr("y",dimensions.height + IOheight + vpadding)
-  //  .append("body")
   return n;
 }
 
