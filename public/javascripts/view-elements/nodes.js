@@ -10,7 +10,7 @@ var nodeids = 0;
   */
 function appendNode(parent, config){
   //console.log(Object.keys(config.inputs).length)
-  var nodewidth = 80;
+  var nodewidth = 120;
   var nodeheight = 180;
   var vpadding = 3;
   var IOy = 20;
@@ -61,18 +61,33 @@ function appendNode(parent, config){
   var outputAmount = Object.keys(config.outputs).length;
 
   var IOheight = (Math.max(inputAmount,outputAmount) + 1) * IOy;
-  console.log("heigth",IOheight)
+
   // Place IO anchors
   var type = [];
   type['isInput'] = true;
   var i = 1;
 
+  // inputs
   for (var key in config.inputs) {
     if (!config.inputs.hasOwnProperty(key)) {
         continue;
     }
 
     var x = 0;
+    var y = dimensions.height + vpadding + i * IOy;
+    i++;
+    addAnchor(n,x,y,key,type);
+  }
+
+  // outputs
+  type['isInput'] = false;
+  i = 1;
+  for (var key in config.outputs) {
+    if (!config.outputs.hasOwnProperty(key)) {
+        continue;
+    }
+
+    var x = nodewidth;
     var y = dimensions.height + vpadding + i * IOy;
     i++;
     addAnchor(n,x,y,key,type);
