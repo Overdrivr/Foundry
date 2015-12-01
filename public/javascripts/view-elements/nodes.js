@@ -40,22 +40,30 @@ var preview = {
   *
   */
 
-function addNodePreview(master){
+function addNode_preview(master){
   var n = appendNode(master,preview);
   n.append("image")
       .attr("xlink:href","https://raw.githubusercontent.com/Overdrivr/ZNoise/master/example-images/simplex2d.bmp")
-      .attr("x", 2)
-      .attr("y", 140)
-      .attr("height","50px")
-      .attr("width","50px");
+      .attr("x", 1)
+      .attr("y", 90)
+      .attr("height","84px")
+      .attr("width","118px");
 }
 
+/*
+ * Create "perlin" node
+ *
+ */
+function addNode_perlin(master){
+ var n = appendNode(master,perlin);
+ }
 
  /*
   *  Node creation function
   *
   *
   */
+// TODO : Create function object with closures and internal properties
 function appendNode(parent, config){
   //console.log(Object.keys(config.inputs).length)
   var nodewidth = 120;

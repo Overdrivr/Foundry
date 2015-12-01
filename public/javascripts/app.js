@@ -26,7 +26,8 @@ var master = container.append("svg")
 var anchorids = 0;
 var connectionids = 0;
 
-addNodePreview(master);
+addNode_preview(master);
+addNode_perlin(master);
 //var node1 = appendNode(master,perlin);
 //var node2 = appendNode(master,simplex);
 //var node3 = appendNode(master,preview);
