@@ -27,6 +27,7 @@ var anchorids = 0;
 var connectionids = 0;
 
 var config = {
+  "title": "perlin",
   "inputs":{
     "A":"type1",
     "B":"type2",
@@ -37,15 +38,15 @@ var config = {
   }
 };
 
-var type = [];
-type['isInput'] = true;
+
 
 var node1 = appendNode(master,config);
+config.title = "simplex"
 var node2 = appendNode(master,config);
 
-addAnchor(node1, 0, 10, "Scale", type);
-addAnchor(node1, 0, 30, "Wavelength", type);
-addAnchor(node2, 0, 10, "Distorsion", type);
+
+//addAnchor(node2, 0, 10, "distorsion", type);
+
 
 
 function getTransformedCoords(x, y, ctm) {
