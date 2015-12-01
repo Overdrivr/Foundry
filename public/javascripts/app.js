@@ -29,12 +29,12 @@ var connectionids = 0;
 var config = {
   "title": "perlin",
   "inputs":{
-    "A":"type1",
-    "B":"type2",
-    "C":"type3"
+    "scale":"type1",
+    "offset":"type2",
+    "distorsion":"type3"
   },
   "outputs":{
-    "D":"type2"
+    "output":"type2"
   }
 };
 
