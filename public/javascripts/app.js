@@ -26,27 +26,40 @@ var master = container.append("svg")
 var anchorids = 0;
 var connectionids = 0;
 
-var config = {
+var perlin = {
   "title": "perlin",
   "inputs":{
-    "scale":"type1",
-    "offset":"type2",
-    "distorsion":"type3"
+    "coords":"float,float",
+    "scale":"float"
   },
   "outputs":{
-    "output":"type2"
+    "density":"float"
   }
 };
 
+var simplex = {
+  "title": "simplex",
+  "inputs":{
+    "coords":"float,float",
+    "scale":"float"
+  },
+  "outputs":{
+    "density":"float"
+  }
+};
 
-
-var node1 = appendNode(master,config);
-config.title = "simplex"
-var node2 = appendNode(master,config);
-
-
-//addAnchor(node2, 0, 10, "distorsion", type);
-
+var preview = {
+  "title": "preview",
+  "inputs":{
+    "color":"color",
+    "coords":"float,float"
+  },
+  "outputs":{
+  }
+};
+var node1 = appendNode(master,perlin);
+var node2 = appendNode(master,simplex);
+var node3 = appendNode(master,preview);
 
 
 function getTransformedCoords(x, y, ctm) {
