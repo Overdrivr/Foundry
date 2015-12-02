@@ -3,16 +3,27 @@ var anchordrag = d3.behavior.drag();
 var currentConnectionId = -1;
 var connections = [];
 
-function addAnchor(node, config){
+function addAnchor(node, x, y, name, type){
+  var radius = 8;
   node.append("circle")
-        .attr("class","anchor")
-        .attr("cx",6)
-        .attr("cy",6)
-        .attr("r", 8)
-        .attr("id",anchorids++)
-        .style("fill","#aea")
-        .call(anchordrag);
-  return node;
+            .attr("class","anchor")
+            .attr("cx",x)
+            .attr("cy",y)
+            .attr("r", radius)
+            .attr("id",anchorids++)
+            .style("fill","#aea")
+            .call(anchordrag);
+
+  t = node.append("text")
+            .text(name);
+
+  var textlength = t[0][0].getComputedTextLength();
+  var xoffset = type.isInput ? 10 : - textlength - 10;
+  var yoffset = radius / 2;
+
+  t.attr("x", x + xoffset)
+   .attr("y", y + yoffset);
+
 }
 
 // Anchor behaviors

@@ -26,22 +26,11 @@ var master = container.append("svg")
 var anchorids = 0;
 var connectionids = 0;
 
-var config = {
-  "inputs":{
-    "A":"type1",
-    "B":"type2",
-    "C":"type3"
-  },
-  "outputs":{
-    "D":"type2"
-  }
-};
-
-var node1 = appendNode(master,config);
-var node2 = appendNode(master,config);
-
-addAnchor(node1);
-addAnchor(node2);
+addNode_preview(master);
+addNode_perlin(master);
+//var node1 = appendNode(master,perlin);
+//var node2 = appendNode(master,simplex);
+//var node3 = appendNode(master,preview);
 
 
 function getTransformedCoords(x, y, ctm) {
