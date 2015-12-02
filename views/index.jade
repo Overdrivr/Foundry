@@ -1,11 +1,10 @@
 extends layout
 
-block content
-  h1= title
-  
+block content  
   input(id="perlin" type="button" value="Perlin" onclick="createNode('perlin');")
   input(id="simplex" type="button" value="Simplex" onclick="createNode('simplex');")
-  #tree-body
+  
+  svg#node-editor-container
   script(type="text/javascript" src="d3/d3.js")
   script(type="text/javascript" src="javascripts/view-elements/nodes.js")
   script(type="text/javascript" src="javascripts/view-elements/anchors.js")
