@@ -10,10 +10,11 @@ function zoomHandler() {
     .attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 }
 
-// create the svg
-var container = d3.select("#tree-body").append("svg")
-            .attr("width", 800)
-            .attr("height", 300)
+// select the svg
+var container = d3.select("#node-editor-container")
+            //.attr("width","300px")
+            //.attr("height","300px")
+            //.attr("viewBox","0 0 500 200")
             .call(zoomListener)
             .append("g")
             .attr("x",0)

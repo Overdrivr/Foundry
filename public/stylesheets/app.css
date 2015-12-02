@@ -1,13 +1,21 @@
-body {
-  position: relative;
-  width: 960px;
+html{
+  height: 100%;
 }
 
-svg {
+body {
+  position: relative;
+  height: 100%;
+}
+
+#node-editor-container {
   font: 10px sans-serif;
   shape-rendering: crispEdges;
   border: solid black 1px;
+  background-color: blue;
+  height: 100%;
+  width: 100%;
 }
+
 /*
 rect {
 
