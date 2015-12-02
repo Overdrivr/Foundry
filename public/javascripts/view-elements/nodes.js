@@ -59,6 +59,14 @@ function addNode_perlin(master){
  }
 
  /*
+  * Create "perlin" node
+  *
+  */
+ function addNode_perlin(master){
+  var n = appendNode(master,perlin);
+  }
+
+ /*
   *  Node creation function
   *
   *
@@ -102,15 +110,6 @@ function appendNode(parent, config){
     .attr("x", nodewidth/2)
     .attr("y",dimensions.height * 0.75)
 
-  // Add title separator
-  n.append("line")
-      .attr("stroke-width",2)
-      .attr("stroke","black")
-      .attr("x1", 2)
-      .attr("x2", nodewidth - 2)
-      .attr("y1", dimensions.height + vpadding)
-      .attr("y2", dimensions.height + vpadding);
-
   /// IOs ///
   // Compute IOs size
   var inputAmount = Object.keys(config.inputs).length;
@@ -148,17 +147,6 @@ function appendNode(parent, config){
     i++;
     addAnchor(n,x,y,key,type);
   }
-
-
-  // Add IO separator
-  n.append("line")
-      .attr("stroke-width",2)
-      .attr("stroke","black")
-      .attr("x1", 2)
-      .attr("x2", nodewidth - 2)
-      .attr("y1", dimensions.height + IOheight + vpadding)
-      .attr("y2", dimensions.height + IOheight + vpadding);
-
   return n;
 }
 
