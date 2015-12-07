@@ -1,4 +1,4 @@
-var nodes = [];
+var inputNodes = [];
 // Data structure to store the graph and its connections
 var graph = new Graph();
 var uniqueid = 0;
@@ -17,33 +17,55 @@ function add(type){
 
   node.type = type;
 
+  // Remember if this node is a starting point for computation
+  if(type == "input")
+  {
+    inputNodes.push(node);
+  }
+
   return id;
 }
 
 function connect(fromA,portA,toB,portB){
   // Check A and B exist
+  var A = graph.getNode(fromA);
+  if(!A)
+    throw new Error("node ",fromA," not found");
 
-  // check portA and port B are valid
+  var B = graph.getNode(toB);
+  if(!B)
+    throw new Error("node ",toB," not found");
 
-  // Check destination port portB is not already connected to something
+  // TODO: check portA and port B are valid
+
+  // TODO: Check destination port portB is not already connected to something
 
   // Build the connection
+  var edge = graph.addEdge(fromA, toB);
 
+  if(!edge)
+    throw new Eror("connection could not be created.")
 
+  edge.fromPort = portA;
+  edge.toPort = portB;
 }
 
 function compute(){
+  var updateStack = [];
   // Put all input nodes in the update queue. These nodes are computations starting point
   // These nodes can be either image-spec, static parameter, etc.
+  inputNodes.forEach(function(node){
+    updateStack.append(node);
+  });
 
   // while update queue contains elements
-    // For each element of the queue
-      // Update it (compute node, update output(s))
+  // For each element of the queue
+  updateStack.forEach(node){
+      // Check all input data are available
 
-      // List child nodes
-      // For each
-        // Mark the child's computed input as ready
+      // Compute the node (compute node and update output edges)
 
-        // If the child has all inputs marked as ready, place it in the update queue
-
+      // For each outgoing connections
+        // Put next nodes into the update stack
+  }
 }
