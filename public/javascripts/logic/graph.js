@@ -1,8 +1,8 @@
-var Graph = require("data-structures/data-structures-1.4.2.min").graph;
+var Graph = require("data-structures").Graph;
 
 var inputNodes = [];
 // Data structure to store the graph and its connections
-var graph = new Graph();
+var graph = new Graph;
 var uniqueid = 0;
 
 /*
