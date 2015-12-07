@@ -1,5 +1,7 @@
 var api = require("./../logic/graph.js");
 var d3 = require("./../d3/d3.js");
+var anchors = require("./anchors.js");
+var tools = require("../tools.js");
 
 var nodex = 10;
 var nodey = 20;
@@ -137,7 +139,7 @@ function appendNode(parent, id, config){
     var x = 0;
     var y = dimensions.height + vpadding + i * IOy;
     i++;
-    addAnchor(n,x,y,key,type);
+    anchors.add(n,x,y,key,type);
   }
 
   // outputs
@@ -151,7 +153,7 @@ function appendNode(parent, id, config){
     var x = nodewidth;
     var y = dimensions.height + vpadding + i * IOy;
     i++;
-    addAnchor(n,x,y,key,type);
+    anchors.add(n,x,y,key,type);
   }
   return n;
 }
@@ -176,13 +178,13 @@ nodedrag
       .attr("transform","translate("+x+","+y+")");
 
     // Select all anchors associated with this node
-    var anchors = node.selectAll(".anchor");
+    var anch = node.selectAll(".anchor");
 
     // Select all associated connections
-    anchors.each(function(){
-      c = getTransformedCoords(d3.select(this).attr("cx"),d3.select(this).attr("cy"),this.getCTM());
+    anch.each(function(){
+      c = tools.getTransformedCoords(d3.select(this).attr("cx"),d3.select(this).attr("cy"),this.getCTM());
       // Start anchors
-      var connectionsToUpdate = master.selectAll("path[startanchor='"+d3.select(this).attr("id")+"']")
+      var connectionsToUpdate = d3.selectAll("path[startanchor='"+d3.select(this).attr("id")+"']")
                 .each(function(){
                     // Update connections to match the new dragged position
                     var segments = this.pathSegList;
@@ -190,7 +192,7 @@ nodedrag
                     segments.getItem(0).y = c.y;
                 });
       // End anchors
-      var connectionsToUpdate = master.selectAll("path[endanchor='"+d3.select(this).attr("id")+"']")
+      var connectionsToUpdate = d3.selectAll("path[endanchor='"+d3.select(this).attr("id")+"']")
                 .each(function(){
                     // Update connections to match the new dragged position
                     var segments = this.pathSegList;
