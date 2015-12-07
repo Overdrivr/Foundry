@@ -1,29 +1,35 @@
+var d3 = require("./../d3/d3.js");
+var tools = require("../tools.js");
+
 // Anchor creation
 var anchordrag = d3.behavior.drag();
 var currentConnectionId = -1;
 var connections = [];
+var anchorids = 0;
+var connectionids = 0;
 
-function addAnchor(node, x, y, name, type){
-  var radius = 8;
-  node.append("circle")
-            .attr("class","anchor")
-            .attr("cx",x)
-            .attr("cy",y)
-            .attr("r", radius)
-            .attr("id",anchorids++)
-            .style("fill","#aea")
-            .call(anchordrag);
+module.exports = {
+  add: function(node, x, y, name, type){
+    var radius = 8;
+    node.append("circle")
+              .attr("class","anchor")
+              .attr("cx",x)
+              .attr("cy",y)
+              .attr("r", radius)
+              .attr("id",anchorids++)
+              .style("fill","#aea")
+              .call(anchordrag);
 
-  t = node.append("text")
-            .text(name);
+    t = node.append("text")
+              .text(name);
 
-  var textlength = t[0][0].getComputedTextLength();
-  var xoffset = type.isInput ? 10 : - textlength - 10;
-  var yoffset = radius / 2;
+    var textlength = t[0][0].getComputedTextLength();
+    var xoffset = type.isInput ? 10 : - textlength - 10;
+    var yoffset = radius / 2;
 
-  t.attr("x", x + xoffset)
-   .attr("y", y + yoffset);
-
+    t.attr("x", x + xoffset)
+     .attr("y", y + yoffset);
+  }
 }
 
 // Anchor behaviors
@@ -34,7 +40,7 @@ anchordrag
     var x = d3.select(this).attr("cx");
     var y = d3.select(this).attr("cy");
 
-    coords = getTransformedCoords(x,y,this.getCTM());
+    coords = tools.getTransformedCoords(x,y,this.getCTM());
 
     currentConnectionId = connectionids;
 
@@ -53,7 +59,7 @@ anchordrag
     var y = d3.mouse(this.parentNode.parentNode)[1];
 
     // Select currently dragged path
-    var currentpath = master.select("#P" + currentConnectionId + "");
+    var currentpath = d3.select("#P" + currentConnectionId + "");
 
     if(currentpath[0][0] == null){
       console.error("on drag : Current path with id #P"+currentConnectionId+" not found.");
@@ -73,10 +79,10 @@ anchordrag
 
     var ctm = this.getCTM();
     // Convert mouse release coordinates to nearest <svg>
-    coords = getTransformedCoords(x,y,ctm);
+    coords = tools.getTransformedCoords(x,y,ctm);
 
     // Select currently dragged path
-    var currentpath = master.select("#P" + currentConnectionId + "");
+    var currentpath = d3.select("#P" + currentConnectionId + "");
 
     if(currentpath[0][0] == null){
       console.error("on dragend : Current path with id #P"+currentConnectionId+" not found.");
@@ -95,9 +101,9 @@ anchordrag
     anchors.each(function(){
       // Convert anchor position relative to nearest <svg>
       ctm = this.parentNode.getCTM();
-      c = getTransformedCoords(d3.select(this).attr("cx"),d3.select(this).attr("cy"),ctm);
+      c = tools.getTransformedCoords(d3.select(this).attr("cx"),d3.select(this).attr("cy"),ctm);
       // Compute mouse release distance to anchor
-      var d = distanceToAnchor(coords.x,coords.y,c.x,c.y)
+      var d = tools.dst(coords.x,coords.y,c.x,c.y)
 
       // Found a connection anchor candidate
       if(d <= d3.select(this).attr("r")) {
