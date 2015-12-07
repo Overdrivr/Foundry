@@ -1,3 +1,5 @@
+var d3 = require("./d3/d3.js");
+var nodegraph = require("./nodegraph-ui/nodes.js");
 
 // create the zoom listener
 var zoomListener = d3.behavior.zoom()
@@ -27,8 +29,8 @@ var master = container.append("svg")
 var anchorids = 0;
 var connectionids = 0;
 
-addNode_preview(master);
-addNode_perlin(master);
+nodegraph.preview(master);
+nodegraph.perlin(master);
 //var node1 = appendNode(master,perlin);
 //var node2 = appendNode(master,simplex);
 //var node3 = appendNode(master,preview);
