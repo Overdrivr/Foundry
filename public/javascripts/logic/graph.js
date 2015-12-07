@@ -1,11 +1,34 @@
 var nodes = [];
-// Need a tree-like data structure to store the graph connections
+// Data structure to store the graph and its connections
+var graph = new Graph();
+var uniqueid = 0;
 
-function register_node(nodeid, type){
+/*
+ * Adds a node to the graph.
+ *
+ */
+function add(type){
+  var id = "node" + uniqueid;
+  uniqueid++;
+  var node = graph.addNode(id);
 
+  if(!node)
+    throw new Error("Node could not be created. Id ",id," probably already in use");
+
+  node.type = type;
+
+  return id;
 }
 
-function connect(nodeA,portA,nodeB,portB){
+function connect(fromA,portA,toB,portB){
+  // Check A and B exist
+
+  // check portA and port B are valid
+
+  // Check destination port portB is not already connected to something
+
+  // Build the connection
+
 
 }
 
