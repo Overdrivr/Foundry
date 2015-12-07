@@ -1,7 +1,6 @@
 // Create first node
 var nodex = 10;
 var nodey = 20;
-var nodeids = 0;
 
 var perlin = {
   "title": "perlin",
@@ -41,7 +40,8 @@ var preview = {
   */
 
 function addNode_preview(master){
-  var n = appendNode(master,preview);
+  var id = add("preview");
+  var n = appendNode(master,id,preview);
   n.append("image")
       .attr("xlink:href","https://raw.githubusercontent.com/Overdrivr/ZNoise/master/example-images/simplex2d.bmp")
       .attr("x", 1)
@@ -55,16 +55,18 @@ function addNode_preview(master){
  *
  */
 function addNode_perlin(master){
- var n = appendNode(master,perlin);
- }
+  var id = add("perlin");
+  var n = appendNode(master,id,perlin);
+}
 
  /*
-  * Create "perlin" node
+  * Create "simplex" node
   *
   */
- function addNode_perlin(master){
-  var n = appendNode(master,perlin);
-  }
+function addNode_simplex(master){
+  var id = add("simplex");
+  var n = appendNode(master,id,simplex);
+}
 
  /*
   *  Node creation function
@@ -72,7 +74,7 @@ function addNode_perlin(master){
   *
   */
 // TODO : Create function object with closures and internal properties
-function appendNode(parent, config){
+function appendNode(parent, id, config){
   //console.log(Object.keys(config.inputs).length)
   var nodewidth = 120;
   var nodeheight = 180;
@@ -83,7 +85,7 @@ function appendNode(parent, config){
 
   n.attr("x",nodex)
     .attr("y",nodey)
-    .attr("id",nodeids++)
+    .attr("id",id)
     .attr("transform","translate("+ nodex +","+ nodey +")")
     .call(nodedrag);
   // Append background
