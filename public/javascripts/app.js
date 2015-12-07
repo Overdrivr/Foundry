@@ -34,17 +34,3 @@ nodegraph.perlin(master);
 //var node1 = appendNode(master,perlin);
 //var node2 = appendNode(master,simplex);
 //var node3 = appendNode(master,preview);
-
-
-function getTransformedCoords(x, y, ctm) {
-    var xn = x * ctm.a + y * ctm.c + ctm.e;
-    var yn = x * ctm.b + y * ctm.d + ctm.f;
-    return {
-      x: xn,
-      y: yn
-    };
-}
-
-function distanceToAnchor(x,y,cx,cy){
-  return Math.sqrt((cx - x)*(cx - x) + (cy - y)*(cy - y));
-}
