@@ -1,3 +1,5 @@
+var Graph = require("data-structures/data-structures-1.4.2.min").graph;
+
 var inputNodes = [];
 // Data structure to store the graph and its connections
 var graph = new Graph();
@@ -16,13 +18,16 @@ function add(type){
     throw new Error("Node could not be created. Id ",id," probably already in use");
 
   node.type = type;
+  node.compute = function(){
+    return "Computing ";
+  };
 
   // Remember if this node is a starting point for computation
   if(type == "input")
   {
     inputNodes.push(node);
   }
-
+  console.log("Created node with id",id);
   return id;
 }
 
@@ -48,24 +53,33 @@ function connect(fromA,portA,toB,portB){
 
   edge.fromPort = portA;
   edge.toPort = portB;
+
+  console.log("Connected ",fromA," to ",toB);
 }
 
 function compute(){
-  var updateStack = [];
   // Put all input nodes in the update queue. These nodes are computations starting point
   // These nodes can be either image-spec, static parameter, etc.
-  inputNodes.forEach(function(node){
-    updateStack.append(node);
-  });
+  var updateQueue = new Queue(inputNodes);
 
   // while update queue contains elements
-  // For each element of the queue
-  updateStack.forEach(node){
-      // Check all input data are available
+  while(updateQueue.size > 0){
+      // Get an item
+      var node = updateQueue.dequeue();
+
+      // Check input data is fully available
+
+      // Else put the node at the end of the queue
+
+      // Retrieve input data
+      //var inputData;
 
       // Compute the node (compute node and update output edges)
+      var outputData = node.compute();
 
-      // For each outgoing connections
-        // Put next nodes into the update stack
+      // For each outgoing connections, put next nodes into the update stack
+      graph.getOutEdgesOf(node.id).forEach(function(i, edge){
+        updateQueue.append(graph.getNode(edge.toId));
+      });
   }
 }
