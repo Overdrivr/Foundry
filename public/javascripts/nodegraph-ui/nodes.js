@@ -1,4 +1,6 @@
-// Create first node
+var api = require("./../logic/graph.js");
+var d3 = require("./../d3/d3.js");
+
 var nodex = 10;
 var nodey = 20;
 
@@ -34,38 +36,40 @@ var preview = {
   }
 };
 
- /*
-  * Create "preview" node
-  *
-  */
+module.exports = {
+  /*
+   * Create "preview" node
+   *
+   */
 
-function addNode_preview(master){
-  var id = add("preview");
-  var n = appendNode(master,id,preview);
-  n.append("image")
-      .attr("xlink:href","https://raw.githubusercontent.com/Overdrivr/ZNoise/master/example-images/simplex2d.bmp")
-      .attr("x", 1)
-      .attr("y", 90)
-      .attr("height","84px")
-      .attr("width","118px");
-}
-
-/*
- * Create "perlin" node
- *
- */
-function addNode_perlin(master){
-  var id = add("perlin");
-  var n = appendNode(master,id,perlin);
-}
+ preview: function(master){
+   var id = api.add("preview");
+   var n = appendNode(master,id,preview);
+   n.append("image")
+       .attr("xlink:href","https://raw.githubusercontent.com/Overdrivr/ZNoise/master/example-images/simplex2d.bmp")
+       .attr("x", 1)
+       .attr("y", 90)
+       .attr("height","84px")
+       .attr("width","118px");
+ },
 
  /*
-  * Create "simplex" node
+  * Create "perlin" node
   *
   */
-function addNode_simplex(master){
-  var id = add("simplex");
-  var n = appendNode(master,id,simplex);
+ perlin: function(master){
+   var id = api.add("perlin");
+   var n = appendNode(master,id,perlin);
+ },
+
+  /*
+   * Create "simplex" node
+   *
+   */
+ simplex: function(master){
+   var id = api.add("simplex");
+   var n = appendNode(master,id,simplex);
+ }
 }
 
  /*
