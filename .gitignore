@@ -31,3 +31,6 @@ bower_components
 
 # Various
 deprecated
+
+# Browserify
+public/javascripts/bundle.js
