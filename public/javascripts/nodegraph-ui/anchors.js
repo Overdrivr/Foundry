@@ -44,7 +44,7 @@ anchordrag
 
     currentConnectionId = connectionids;
 
-    currentpath = master.append("path")
+    currentpath = d3.select("svg#master").append("path")
       .attr("startanchor",d3.select(this).attr("id"))
       .attr("id","P" + connectionids++)
       .attr("d","M"+coords.x+" "+coords.y+" L"+coords.x+" "+coords.y)
