@@ -1,3 +1,5 @@
+var d3 = require("./d3/d3.js");
+var nodegraph = require("./nodegraph-ui/nodes.js");
 
 // create the zoom listener
 var zoomListener = d3.behavior.zoom()
@@ -12,37 +14,15 @@ function zoomHandler() {
 
 // select the svg
 var container = d3.select("#node-editor-container")
-            //.attr("width","300px")
-            //.attr("height","300px")
-            //.attr("viewBox","0 0 500 200")
             .call(zoomListener)
             .append("g")
             .attr("x",0)
             .attr("y",0);
 
-var master = container.append("svg")
-                  .attr("overflow","visible");
+// Add the inner svg that will contain the nodes
+container.append("svg")
+            .attr("id","master")
+            .attr("overflow","visible");
 
-
-var anchorids = 0;
-var connectionids = 0;
-
-addNode_preview(master);
-addNode_perlin(master);
-//var node1 = appendNode(master,perlin);
-//var node2 = appendNode(master,simplex);
-//var node3 = appendNode(master,preview);
-
-
-function getTransformedCoords(x, y, ctm) {
-    var xn = x * ctm.a + y * ctm.c + ctm.e;
-    var yn = x * ctm.b + y * ctm.d + ctm.f;
-    return {
-      x: xn,
-      y: yn
-    };
-}
-
-function distanceToAnchor(x,y,cx,cy){
-  return Math.sqrt((cx - x)*(cx - x) + (cy - y)*(cy - y));
-}
+nodegraph.preview();
+nodegraph.perlin();

@@ -1,4 +1,8 @@
-// Create first node
+var api = require("./../logic/graph.js");
+var d3 = require("./../d3/d3.js");
+var anchors = require("./anchors.js");
+var tools = require("../tools.js");
+
 var nodex = 10;
 var nodey = 20;
 
@@ -34,38 +38,40 @@ var preview = {
   }
 };
 
- /*
-  * Create "preview" node
-  *
-  */
+module.exports = {
+  /*
+   * Create "preview" node
+   *
+   */
 
-function addNode_preview(master){
-  var id = add("preview");
-  var n = appendNode(master,id,preview);
-  n.append("image")
-      .attr("xlink:href","https://raw.githubusercontent.com/Overdrivr/ZNoise/master/example-images/simplex2d.bmp")
-      .attr("x", 1)
-      .attr("y", 90)
-      .attr("height","84px")
-      .attr("width","118px");
-}
-
-/*
- * Create "perlin" node
- *
- */
-function addNode_perlin(master){
-  var id = add("perlin");
-  var n = appendNode(master,id,perlin);
-}
+ preview: function(){
+   var id = api.add("preview");
+   var n = appendNode(id,preview);
+   n.append("image")
+       .attr("xlink:href","https://raw.githubusercontent.com/Overdrivr/ZNoise/master/example-images/simplex2d.bmp")
+       .attr("x", 1)
+       .attr("y", 90)
+       .attr("height","84px")
+       .attr("width","118px");
+ },
 
  /*
-  * Create "simplex" node
+  * Create "perlin" node
   *
   */
-function addNode_simplex(master){
-  var id = add("simplex");
-  var n = appendNode(master,id,simplex);
+ perlin: function(master){
+   var id = api.add("perlin");
+   var n = appendNode(id,perlin);
+ },
+
+  /*
+   * Create "simplex" node
+   *
+   */
+ simplex: function(master){
+   var id = api.add("simplex");
+   var n = appendNode(id,simplex);
+ }
 }
 
  /*
@@ -74,14 +80,14 @@ function addNode_simplex(master){
   *
   */
 // TODO : Create function object with closures and internal properties
-function appendNode(parent, id, config){
+function appendNode(id, config){
   //console.log(Object.keys(config.inputs).length)
   var nodewidth = 120;
   var nodeheight = 180;
   var vpadding = 3;
   var IOy = 20;
   // Create the g
-  var n = parent.append("g");
+  var n = d3.select("svg#master").append("g");
 
   n.attr("x",nodex)
     .attr("y",nodey)
@@ -133,7 +139,7 @@ function appendNode(parent, id, config){
     var x = 0;
     var y = dimensions.height + vpadding + i * IOy;
     i++;
-    addAnchor(n,x,y,key,type);
+    anchors.add(n,x,y,key,type);
   }
 
   // outputs
@@ -147,7 +153,7 @@ function appendNode(parent, id, config){
     var x = nodewidth;
     var y = dimensions.height + vpadding + i * IOy;
     i++;
-    addAnchor(n,x,y,key,type);
+    anchors.add(n,x,y,key,type);
   }
   return n;
 }
@@ -172,13 +178,13 @@ nodedrag
       .attr("transform","translate("+x+","+y+")");
 
     // Select all anchors associated with this node
-    var anchors = node.selectAll(".anchor");
+    var anch = node.selectAll(".anchor");
 
     // Select all associated connections
-    anchors.each(function(){
-      c = getTransformedCoords(d3.select(this).attr("cx"),d3.select(this).attr("cy"),this.getCTM());
+    anch.each(function(){
+      c = tools.getTransformedCoords(d3.select(this).attr("cx"),d3.select(this).attr("cy"),this.getCTM());
       // Start anchors
-      var connectionsToUpdate = master.selectAll("path[startanchor='"+d3.select(this).attr("id")+"']")
+      var connectionsToUpdate = d3.selectAll("path[startanchor='"+d3.select(this).attr("id")+"']")
                 .each(function(){
                     // Update connections to match the new dragged position
                     var segments = this.pathSegList;
@@ -186,7 +192,7 @@ nodedrag
                     segments.getItem(0).y = c.y;
                 });
       // End anchors
-      var connectionsToUpdate = master.selectAll("path[endanchor='"+d3.select(this).attr("id")+"']")
+      var connectionsToUpdate = d3.selectAll("path[endanchor='"+d3.select(this).attr("id")+"']")
                 .each(function(){
                     // Update connections to match the new dragged position
                     var segments = this.pathSegList;

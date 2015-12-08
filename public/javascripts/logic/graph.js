@@ -1,85 +1,87 @@
-var Graph = require("data-structures/data-structures-1.4.2.min").graph;
+var Graph = require("data-structures").Graph;
 
 var inputNodes = [];
 // Data structure to store the graph and its connections
-var graph = new Graph();
+var graph = new Graph;
 var uniqueid = 0;
 
-/*
- * Adds a node to the graph.
- *
- */
-function add(type){
-  var id = "node" + uniqueid;
-  uniqueid++;
-  var node = graph.addNode(id);
+module.exports = {
+  /*
+   * Adds a node to the graph.
+   *
+   */
+  add: function(type){
+    var id = "node" + uniqueid;
+    uniqueid++;
+    var node = graph.addNode(id);
 
-  if(!node)
-    throw new Error("Node could not be created. Id ",id," probably already in use");
+    if(!node)
+      throw new Error("Node could not be created. Id ",id," probably already in use");
 
-  node.type = type;
-  node.compute = function(){
-    return "Computing ";
-  };
+    node.type = type;
+    node.compute = function(){
+      return "Computing ";
+    };
 
-  // Remember if this node is a starting point for computation
-  if(type == "input")
-  {
-    inputNodes.push(node);
-  }
-  console.log("Created node with id",id);
-  return id;
-}
+    // Remember if this node is a starting point for computation
+    if(type == "input")
+    {
+      inputNodes.push(node);
+    }
+    console.log("Created node with id",id);
+    return id;
+  },
 
-function connect(fromA,portA,toB,portB){
-  // Check A and B exist
-  var A = graph.getNode(fromA);
-  if(!A)
-    throw new Error("node ",fromA," not found");
+  connect: function(fromA,portA,toB,portB){
+    // Check A and B exist
+    var A = graph.getNode(fromA);
+    if(!A)
+      throw new Error("node ",fromA," not found");
 
-  var B = graph.getNode(toB);
-  if(!B)
-    throw new Error("node ",toB," not found");
+    var B = graph.getNode(toB);
+    if(!B)
+      throw new Error("node ",toB," not found");
 
-  // TODO: check portA and port B are valid
+    // TODO: check portA and port B are valid
 
-  // TODO: Check destination port portB is not already connected to something
+    // TODO: Check destination port portB is not already connected to something
 
-  // Build the connection
-  var edge = graph.addEdge(fromA, toB);
+    // Build the connection
+    var edge = graph.addEdge(fromA, toB);
 
-  if(!edge)
-    throw new Eror("connection could not be created.")
+    if(!edge)
+      throw new Eror("connection could not be created.")
 
-  edge.fromPort = portA;
-  edge.toPort = portB;
+    edge.fromPort = portA;
+    edge.toPort = portB;
 
-  console.log("Connected ",fromA," to ",toB);
-}
+    console.log("Connected ",fromA," to ",toB);
+  },
 
-function compute(){
-  // Put all input nodes in the update queue. These nodes are computations starting point
-  // These nodes can be either image-spec, static parameter, etc.
-  var updateQueue = new Queue(inputNodes);
+  compute: function(){
+    // Put all input nodes in the update queue. These nodes are computations starting point
+    // These nodes can be either image-spec, static parameter, etc.
+    var updateQueue = new Queue(inputNodes);
 
-  // while update queue contains elements
-  while(updateQueue.size > 0){
-      // Get an item
-      var node = updateQueue.dequeue();
+    // while update queue contains elements
+    while(updateQueue.size > 0){
+        // Get an item
+        var node = updateQueue.dequeue();
 
-      // Check input data is fully available
+        // Check input data is fully available
 
-      // Else put the node at the end of the queue
+        // Else put the node at the end of the queue
 
-      // Retrieve input data
-      //var inputData;
+        // Retrieve input data
+        //var inputData;
 
-      // Compute the node (compute node and update output edges)
-      var outputData = node.compute();
+        // Compute the node (compute node and update output edges)
+        var outputData = node.compute();
 
-      // For each outgoing connections, put next nodes into the update stack
-      graph.getOutEdgesOf(node.id).forEach(function(i, edge){
-        updateQueue.append(graph.getNode(edge.toId));
-      });
+        // For each outgoing connections, put next nodes into the update stack
+        graph.getOutEdgesOf(node.id).forEach(function(i, edge){
+          updateQueue.append(graph.getNode(edge.toId));
+        });
+    }
   }
 }
