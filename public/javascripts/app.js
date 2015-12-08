@@ -14,23 +14,15 @@ function zoomHandler() {
 
 // select the svg
 var container = d3.select("#node-editor-container")
-            //.attr("width","300px")
-            //.attr("height","300px")
-            //.attr("viewBox","0 0 500 200")
             .call(zoomListener)
             .append("g")
             .attr("x",0)
             .attr("y",0);
 
-var master = container.append("svg")
-                  .attr("overflow","visible");
+// Add the inner svg that will contain the nodes
+container.append("svg")
+            .attr("id","master")
+            .attr("overflow","visible");
 
-
-var anchorids = 0;
-var connectionids = 0;
-
-nodegraph.preview(master);
-nodegraph.perlin(master);
-//var node1 = appendNode(master,perlin);
-//var node2 = appendNode(master,simplex);
-//var node3 = appendNode(master,preview);
+nodegraph.preview();
+nodegraph.perlin();

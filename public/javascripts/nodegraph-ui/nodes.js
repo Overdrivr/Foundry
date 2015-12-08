@@ -44,9 +44,9 @@ module.exports = {
    *
    */
 
- preview: function(master){
+ preview: function(){
    var id = api.add("preview");
-   var n = appendNode(master,id,preview);
+   var n = appendNode(id,preview);
    n.append("image")
        .attr("xlink:href","https://raw.githubusercontent.com/Overdrivr/ZNoise/master/example-images/simplex2d.bmp")
        .attr("x", 1)
@@ -61,7 +61,7 @@ module.exports = {
   */
  perlin: function(master){
    var id = api.add("perlin");
-   var n = appendNode(master,id,perlin);
+   var n = appendNode(id,perlin);
  },
 
   /*
@@ -70,7 +70,7 @@ module.exports = {
    */
  simplex: function(master){
    var id = api.add("simplex");
-   var n = appendNode(master,id,simplex);
+   var n = appendNode(id,simplex);
  }
 }
 
@@ -80,14 +80,14 @@ module.exports = {
   *
   */
 // TODO : Create function object with closures and internal properties
-function appendNode(parent, id, config){
+function appendNode(id, config){
   //console.log(Object.keys(config.inputs).length)
   var nodewidth = 120;
   var nodeheight = 180;
   var vpadding = 3;
   var IOy = 20;
   // Create the g
-  var n = parent.append("g");
+  var n = d3.select("svg#master").append("g");
 
   n.attr("x",nodex)
     .attr("y",nodey)
