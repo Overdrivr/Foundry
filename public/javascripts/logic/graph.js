@@ -1,4 +1,5 @@
 var Graph = require("data-structures").Graph;
+var Queue = require("data-structures").Queue;
 
 var inputNodes = [];
 // Data structure to store the graph and its connections
@@ -36,11 +37,11 @@ module.exports = {
     // Check A and B exist
     var A = graph.getNode(fromA);
     if(!A)
-      throw new Error("node ",fromA," not found");
+      throw new Error("node "+fromA+" not found");
 
     var B = graph.getNode(toB);
     if(!B)
-      throw new Error("node ",toB," not found");
+      throw new Error("node "+toB+" not found");
 
     // TODO: check portA and port B are valid
 
@@ -67,6 +68,7 @@ module.exports = {
     while(updateQueue.size > 0){
         // Get an item
         var node = updateQueue.dequeue();
+        console.log("Computing ",node);
 
         // Check input data is fully available
 
@@ -79,7 +81,7 @@ module.exports = {
         var outputData = node.compute();
 
         // For each outgoing connections, put next nodes into the update stack
-        graph.getOutEdgesOf(node.id).forEach(function(i, edge){
+        graph.getOutEdgesOf(node).forEach(function(i, edge){
           updateQueue.append(graph.getNode(edge.toId));
         });
     }
