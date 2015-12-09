@@ -38,14 +38,27 @@ var preview = {
   }
 };
 
+var iterator = {
+  "title": "iterator",
+  "inputs":{
+  },
+  "outputs":{
+    "coords":"float,float"
+  }
+};
+
 module.exports = {
+  iterator: function(){
+    var id = api.add("input");
+    var n = appendNode(id,iterator);
+  },
   /*
    * Create "preview" node
    *
    */
 
  preview: function(){
-   var id = api.add("preview");
+   var id = api.add("output");
    var n = appendNode(id,preview);
    n.append("image")
        .attr("xlink:href","https://raw.githubusercontent.com/Overdrivr/ZNoise/master/example-images/simplex2d.bmp")
