@@ -1,5 +1,6 @@
 var d3 = require("./../d3/d3.js");
 var tools = require("../tools.js");
+var graph = require("../logic/graph.js");
 
 // Anchor creation
 var anchordrag = d3.behavior.drag();
@@ -116,7 +117,13 @@ anchordrag
       // Connection established !
       console.log("Connection established.");
       console.log(selectedAnchors)
-      currentpath.attr("endanchor",selectedAnchors[0].attr("id"))
+      currentpath.attr("endanchor",selectedAnchors[0].attr("id"));
+
+      // Add connection in the api
+      var nodeA = d3.select(this.parentNode).attr("id");
+      var nodeB = d3.select(selectedAnchors[0][0][0].parentNode).attr("id");
+      console.log("nodes",nodeA,nodeB)
+      graph.connect(nodeA,"coords",nodeB,"coords");
     }
     else {
       // Drag did not end close enough to an anchor, so remove path
