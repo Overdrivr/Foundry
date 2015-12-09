@@ -1,5 +1,6 @@
 var d3 = require("./d3/d3.js");
 var nodegraph = require("./nodegraph-ui/nodes.js");
+var graph = require("./logic/graph.js");
 
 // create the zoom listener
 var zoomListener = d3.behavior.zoom()
@@ -24,5 +25,16 @@ container.append("svg")
             .attr("id","master")
             .attr("overflow","visible");
 
+
+// Provide functionnality to buttons
+
+var b = d3.select("button#refresh-btn")
+  .on("click",function(){
+    graph.compute()
+  });
+
+console.log("item",b)
+
+nodegraph.iterator();
 nodegraph.preview();
 nodegraph.perlin();
